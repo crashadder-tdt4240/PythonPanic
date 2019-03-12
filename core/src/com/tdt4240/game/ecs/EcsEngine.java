@@ -24,11 +24,13 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.tdt4240.game.ecs.components.Box2dComponent;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
+import com.tdt4240.game.ecs.components.SnakeComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
 import com.tdt4240.game.ecs.systems.ContactSystem;
 import com.tdt4240.game.ecs.systems.PhysicsSystem;
 import com.tdt4240.game.ecs.systems.PlayerInputSystem;
+import com.tdt4240.game.ecs.systems.SnakeSystem;
 import com.tdt4240.game.ecs.systems.SpriteSystem;
 import com.tdt4240.game.utils.Box2DUtils;
 
@@ -46,13 +48,15 @@ public class EcsEngine{
     PlayerInputSystem playerInputSystem = new PlayerInputSystem();
     PhysicsSystem physicsSystem = new PhysicsSystem();
     SpriteSystem spriteSystem = new SpriteSystem();
+    SnakeSystem snakeSystem = new SnakeSystem();
+
     WorldConfiguration config = new WorldConfigurationBuilder()
       .with(contactSystem)
       .with(playerInputSystem)
       .with(physicsSystem)
       .with(spriteSystem)
+      .with(snakeSystem)
       .build();
-    /* simple test code
     
     Texture testTexture = new Texture(Gdx.files.internal("test.png"));
 
@@ -66,11 +70,11 @@ public class EcsEngine{
     bWorld.setContactListener(contactSystem);
     debugRenderer = new Box2DDebugRenderer(
       true,
-      false,
-      false,
       true,
       true,
-      false
+      true,
+      true,
+      true
     );
 
 
@@ -83,6 +87,7 @@ public class EcsEngine{
     ComponentMapper<TransformComponent> transformMapper = world.getMapper(TransformComponent.class);
     ComponentMapper<PlayerInputComponent> inputMapper = world.getMapper(PlayerInputComponent.class);
     ComponentMapper<SpriteComponent> spriteMapper = world.getMapper(SpriteComponent.class);
+    ComponentMapper<SnakeComponent> snakeMapper = world.getMapper(SnakeComponent.class);
 
     Box2dComponent box2dComponent = box2dMapper.create(entity1);
     TransformComponent transformComponent = transformMapper.create(entity1);
@@ -94,6 +99,7 @@ public class EcsEngine{
     SpriteComponent spriteComponent1 = spriteMapper.create(entity1);
     SpriteComponent spriteComponent2 = spriteMapper.create(entity2);
 
+    SnakeComponent snakeComponent = snakeMapper.create(entity1);
 
     transformComponent.transform.translate(0, 0, -50);
     transformComponent2.transform.translate(0, 0, -50);
@@ -106,7 +112,7 @@ public class EcsEngine{
     body2.setLinearVelocity(0, -32);
 
     inputMapper.create(entity1);
-    */
+    
     
   }
 
@@ -138,7 +144,7 @@ public class EcsEngine{
     }
     acc -= worldDelta*ticks;
     tickCounter += ticks;
-    //debugRenderer.render(bWorld, cam1.combined);
+    debugRenderer.render(bWorld, cam1.combined);
   }
 
 }

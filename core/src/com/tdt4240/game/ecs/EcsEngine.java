@@ -52,8 +52,7 @@ public class EcsEngine{
       .with(physicsSystem)
       .with(spriteSystem)
       .build();
-    /* simple test code
-    
+
     Texture testTexture = new Texture(Gdx.files.internal("test.png"));
 
     Decal sprite = Decal.newDecal(16, 16, new TextureRegion(testTexture));
@@ -106,7 +105,7 @@ public class EcsEngine{
     body2.setLinearVelocity(0, -32);
 
     inputMapper.create(entity1);
-    */
+
     
   }
 

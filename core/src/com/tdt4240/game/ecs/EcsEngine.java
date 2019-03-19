@@ -113,7 +113,6 @@ public class EcsEngine{
 
     inputMapper.create(entity1);
     
-    
   }
 
   public <T extends Component> ComponentMapper<T> getMapper(Class<T> cls){

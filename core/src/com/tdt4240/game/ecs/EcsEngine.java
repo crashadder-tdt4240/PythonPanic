@@ -13,8 +13,11 @@ import com.artemis.EntitySubscription.SubscriptionListener;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalMaterial;
@@ -23,11 +26,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.tdt4240.game.ecs.components.Box2dComponent;
+import com.tdt4240.game.ecs.components.DrawComponent;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.SnakeComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
 import com.tdt4240.game.ecs.systems.ContactSystem;
+import com.tdt4240.game.ecs.systems.DrawSystem;
 import com.tdt4240.game.ecs.systems.PhysicsSystem;
 import com.tdt4240.game.ecs.systems.PlayerInputSystem;
 import com.tdt4240.game.ecs.systems.SnakeSystem;
@@ -42,8 +47,14 @@ public class EcsEngine{
 
   private com.badlogic.gdx.physics.box2d.World bWorld;
   private Box2DDebugRenderer debugRenderer;
+  private Pixmap surface;
+  private Texture surfaceTexture;
   Camera cam1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
   public EcsEngine(){
+    surface = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Format.RGB888);
+    surface.setColor(Color.RED);
+    
+    DrawSystem drawSystem = new DrawSystem(surface);
     ContactSystem contactSystem = new ContactSystem();
     PlayerInputSystem playerInputSystem = new PlayerInputSystem();
     PhysicsSystem physicsSystem = new PhysicsSystem();
@@ -51,6 +62,7 @@ public class EcsEngine{
     SnakeSystem snakeSystem = new SnakeSystem();
 
     WorldConfiguration config = new WorldConfigurationBuilder()
+      .with(drawSystem)
       .with(contactSystem)
       .with(playerInputSystem)
       .with(physicsSystem)
@@ -60,9 +72,21 @@ public class EcsEngine{
     
     Texture testTexture = new Texture(Gdx.files.internal("test.png"));
 
-    Decal sprite = Decal.newDecal(16, 16, new TextureRegion(testTexture));
+    Decal sprite = Decal.newDecal(16, 16, new TextureRegion(testTexture), true);
   
-    Decal sprite2 = Decal.newDecal(16, 16, new TextureRegion(testTexture));
+    Decal sprite2 = Decal.newDecal(16, 16, new TextureRegion(testTexture), true);
+
+    surfaceTexture = new Texture(surface);
+    surfaceTexture.bind(1);
+    Gdx.gl.glActiveTexture(0);
+
+
+    Decal surfaceSprite = Decal.newDecal(
+      Gdx.graphics.getWidth(), 
+      Gdx.graphics.getHeight(), 
+      new TextureRegion(surfaceTexture)
+    );
+
     config.expectedEntityCount(2048);
     
     world = new World(config);
@@ -83,11 +107,15 @@ public class EcsEngine{
     Body body2 = Box2DUtils.createBody(bWorld, Box2DUtils.DYNAMIC_BODY_DEF, Box2DUtils.PLAYER_FIXTURE_DEF);
     int entity1 = world.create();
     int entity2 = world.create();
+    int surfaceEntity = world.create();
+
+
     ComponentMapper<Box2dComponent> box2dMapper = world.getMapper(Box2dComponent.class);
     ComponentMapper<TransformComponent> transformMapper = world.getMapper(TransformComponent.class);
     ComponentMapper<PlayerInputComponent> inputMapper = world.getMapper(PlayerInputComponent.class);
     ComponentMapper<SpriteComponent> spriteMapper = world.getMapper(SpriteComponent.class);
     ComponentMapper<SnakeComponent> snakeMapper = world.getMapper(SnakeComponent.class);
+    ComponentMapper<DrawComponent> drawMapper = world.getMapper(DrawComponent.class);
 
     Box2dComponent box2dComponent = box2dMapper.create(entity1);
     TransformComponent transformComponent = transformMapper.create(entity1);
@@ -96,16 +124,25 @@ public class EcsEngine{
     Box2dComponent box2dComponent2 = box2dMapper.create(entity2);
     TransformComponent transformComponent2 = transformMapper.create(entity2);
 
+    TransformComponent transformComponent3 = transformMapper.create(surfaceEntity);
+
     SpriteComponent spriteComponent1 = spriteMapper.create(entity1);
     SpriteComponent spriteComponent2 = spriteMapper.create(entity2);
+    SpriteComponent spriteComponent3 = spriteMapper.create(surfaceEntity);
 
     SnakeComponent snakeComponent = snakeMapper.create(entity1);
+    DrawComponent drawComponent = drawMapper.create(entity1);
+    drawComponent.drawTo = surfaceEntity;
+
+
 
     transformComponent.transform.translate(0, 0, -50);
     transformComponent2.transform.translate(0, 0, -50);
+    transformComponent3.transform.translate(0, 0, -100);
 
     spriteComponent1.sprite = sprite;
     spriteComponent2.sprite = sprite2;
+    spriteComponent3.sprite = surfaceSprite;
 
     box2dComponent2.body = body2;
     body2.setTransform(new Vector2(8, 32), 0);
@@ -141,9 +178,10 @@ public class EcsEngine{
       this.world.setDelta(worldDelta);
       world.process();
     }
+    surfaceTexture.draw(surface, 0, 0);
     acc -= worldDelta*ticks;
     tickCounter += ticks;
-    debugRenderer.render(bWorld, cam1.combined);
+    //debugRenderer.render(bWorld, cam1.combined);
   }
 
 }

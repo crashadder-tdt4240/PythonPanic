@@ -32,7 +32,7 @@ public class GameScreen extends ScreenAdapter{
   public GameScreen(EcsEngine engine){
     this.engine = engine;
     spriteMapper = engine.getMapper(SpriteComponent.class);
-    gameCamera = new OrthographicCamera(Gdx.graphics.getWidth()/4f, Gdx.graphics.getHeight()/4f);
+    gameCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     gameCamera.far = 10000f;
     gameCamera.position.set(0, 0, 0);
 

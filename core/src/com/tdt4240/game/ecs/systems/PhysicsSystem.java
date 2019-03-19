@@ -24,9 +24,10 @@ public class PhysicsSystem extends IteratingSystem{
     Box2dComponent box2dComponent = box2dMapper.get(entity);
     Vector2 position = box2dComponent.body.getPosition();
     Vector3 transformPosition = transformComponent.transform.getTranslation(new Vector3());
+    //todo: handle this better 
     float rotation = box2dComponent.body.getAngle();
     transformPosition.x = position.x;
     transformPosition.y = position.y;
-    transformComponent.transform.set(transformPosition, new Quaternion(new Vector3(0,0,1), rotation));
+    transformComponent.transform.set(transformPosition, new Quaternion(new Vector3(0,0,1), -90 + MathUtils.radDeg * rotation));
   }
 }

@@ -1,5 +1,7 @@
 package com.tdt4240.game;
 
+import java.util.List;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -23,30 +25,38 @@ public class Game extends ApplicationAdapter {
   private EcsEngine engine;
   private GameController controller;
   private GameScreen screen;
+  private boolean preloaded = false;
 
   private Assets assets;
 
   @Override
   public void create () {
     GLSettings.create();
-    engine = new EcsEngine();
-    controller = new GameController(engine);
-    screen = new GameScreen(engine);
-    Gdx.input.setInputProcessor(controller);
-    assets = new Assets();
+    assets = Assets.getInstance();
     assets.setup();
-    assets.preload();
+    assets.preload().subscribe((List<?> assets) -> {
+      System.out.println("All assets finished loading!");
+      for(Object obj : assets){
+        System.out.println(obj);
+      }
+      engine = new EcsEngine();
+      controller = new GameController(engine);
+      screen = new GameScreen(engine);
+      preloaded = true;
+      Gdx.input.setInputProcessor(controller);
+    });
   }
 
   @Override
   public void render () {
     float delta = Gdx.graphics.getDeltaTime();
-    engine.update(delta);
     assets.loadUpdate();
-    GLSettings.preRender();
-    screen.render(delta);
-    GLSettings.postRender();
-    
+    if(preloaded){
+      engine.update(delta);
+      GLSettings.preRender();
+      screen.render(delta);
+      GLSettings.postRender();
+    }
   }
 
   @Override

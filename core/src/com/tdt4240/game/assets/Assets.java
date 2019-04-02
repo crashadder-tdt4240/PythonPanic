@@ -3,7 +3,9 @@ package com.tdt4240.game.assets;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 
@@ -12,6 +14,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.tdt4240.game.assets.loaders.YamlLoader;
 
 
@@ -27,15 +30,21 @@ public class Assets {
   private FileHandleResolver fileResolver;
 
   private HashMap<String, AsyncSubject<?>> assetsBeingLoaded = new HashMap<String, AsyncSubject<?>>();
+
+  private HashMap<String, Object> assetMap = new HashMap<String, Object>();
   
   
   private Subject<Integer> progressSubject = BehaviorSubject.createDefault(0);
   
-  
+  private static Assets assets = new Assets();
 
   public Assets(){
     assetManager = new AssetManager();
     this.fileResolver = assetManager.getFileHandleResolver();
+  }
+
+  public static Assets getInstance(){
+    return assets;
   }
 
   // loads and sets assetloaders
@@ -75,7 +84,10 @@ public class Assets {
 
   // starts preloading assets, has to be run after setup
   // should return async subject that complets once all assets are preloaded
-  public <T> void preload(){
+  public <T> Observable<List<?>> preload(){
+
+    ArrayList<Observable<?>> awaitList = new ArrayList<Observable<?>>();
+
     for(String dir : presets.getAssetDirs()){
       FileHandle indexHandle = fileResolver.resolve(String.format("%s/index.yml", dir));
       AssetsIndex index = getSync(new AssetDescriptor<>(indexHandle, AssetsIndex.class));
@@ -83,12 +95,16 @@ public class Assets {
       for(FileHandle assetFile : fileResolver.resolve(dir).list()){
         if (!assetFile.equals(indexHandle)) {
           // assign name to asset after loading
-          getAsync(new AssetDescriptor<T>(assetFile, assetClass)).subscribe((T asset) -> {
-            System.out.printf("Asset loaded %s\n", assetFile.name());
-          });
+          awaitList.add(getAsync(new AssetDescriptor<T>(assetFile, assetClass)).map((T asset) -> {
+            String assetName = String.format(index.resolvePrefix(assetFile.nameWithoutExtension()));
+            System.out.printf("Asset loaded %s\n", assetName);
+            assetMap.put(assetName, asset);
+            return asset;
+          }));
         }
       }
     }
+    return Observable.zip(awaitList, (res) -> Arrays.asList(res) );
   }
 
   public <T> T getSync(AssetDescriptor<T> assetDescriptor){
@@ -128,7 +144,7 @@ public class Assets {
 
   // get asset by name
   public <T> T getAsset(String assetname){
-    return null;
+    return (T)assetMap.get(assetname);
   }
 
   

@@ -1,0 +1,31 @@
+# Config file for the asset loader
+
+# Preload assets?
+
+# class aliases
+aliases:
+  Texture: 'com.badlogic.gdx.graphics.Texture'
+  TextureLoader: 'com.badlogic.gdx.assets.loaders.TextureLoader'
+  BitmapFontLoader: 'com.badlogic.gdx.assets.loaders.BitmapFontLoader'
+  BitmapFont: 'com.badlogic.gdx.graphics.g2d.BitmapFont'
+  YamlLoader: 'com.tdt4240.game.assets.loaders.YamlLoader'
+  Test: 'com.tdt4240.game.assets.Test'
+
+#loaders
+assetLoaders:
+  TextureLoader:
+   - Texture
+  BitmapFontLoader:
+   - BitmapFont
+
+
+
+      
+
+# assets
+assets:
+  - './textures'
+
+# game settings
+#settingsFile: './default-settings.yml'
+

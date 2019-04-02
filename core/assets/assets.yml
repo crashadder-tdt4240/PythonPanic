@@ -4,12 +4,25 @@
 
 # class aliases
 aliases:
+  # assets
+  ## gdx
   Texture: 'com.badlogic.gdx.graphics.Texture'
-  TextureLoader: 'com.badlogic.gdx.assets.loaders.TextureLoader'
-  BitmapFontLoader: 'com.badlogic.gdx.assets.loaders.BitmapFontLoader'
   BitmapFont: 'com.badlogic.gdx.graphics.g2d.BitmapFont'
+  TextureAtlas: 'com.badlogic.gdx.graphics.g2d.TextureAtlas'
+  Music: 'com.badlogic.gdx.audio.Music'
+  Sound: 'com.badlogic.gdx.audio.Sound'
+  Skin: 'com.badlogic.gdx.scenes.scene2d.ui.Skin'
+  
+  # loaders
+  TextureLoader: 'com.badlogic.gdx.assets.loaders.TextureLoader'
+  TextureAtlasLoader: 'com.badlogic.gdx.assets.loaders.TexutreAtlasLoader'
+  SkinLoader: 'com.badlogic.gdx.assets.loaders.SkinLoader'
+  SoundLoader: 'com.badlogic.gdx.assets.loaders.SoundLoader'
+  MusicLoader: 'com.badlogic.gdx.assets.loaders.MusicLoader'
+  BitmapFontLoader: 'com.badlogic.gdx.assets.loaders.BitmapFontLoader'
+
   YamlLoader: 'com.tdt4240.game.assets.loaders.YamlLoader'
-  Test: 'com.tdt4240.game.assets.Test'
+  
 
 #loaders
 assetLoaders:
@@ -17,6 +30,14 @@ assetLoaders:
    - Texture
   BitmapFontLoader:
    - BitmapFont
+  SkinLoader:
+   - Skin
+  SoundLoader:
+   - Sound
+  MusicLoader:
+   - Music
+  TextureAtlasLoader:
+   - TextureAtlas
 
 
 

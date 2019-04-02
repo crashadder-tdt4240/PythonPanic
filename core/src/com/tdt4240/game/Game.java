@@ -16,18 +16,23 @@ import com.tdt4240.game.controllers.MainMenuController;
 import com.tdt4240.game.ecs.EcsEngine;
 import com.tdt4240.game.views.GameScreen;
 import com.tdt4240.game.views.MainMenuScreen;
+import com.tdt4240.game.views.SplashScreen;
 
 public class Game extends ApplicationAdapter {
   
   private EcsEngine engine;
   private MainMenuController controller;
   private MainMenuScreen screen;
+  private SplashScreen splashScreen;
+
   @Override
   public void create () {
     GLSettings.create();
     engine = new EcsEngine();
     screen = new MainMenuScreen();
     controller = new MainMenuController(screen);
+    splashScreen = new SplashScreen();
+
     //Gdx.input.setInputProcessor(controller);
   }
 
@@ -37,7 +42,8 @@ public class Game extends ApplicationAdapter {
     engine.update(delta);
     
     GLSettings.preRender();
-    screen.render(delta);
+    //screen.render(delta);
+    splashScreen.render(delta); //her??
     GLSettings.postRender();
     
   }

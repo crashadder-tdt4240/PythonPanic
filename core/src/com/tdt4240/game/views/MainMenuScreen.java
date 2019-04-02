@@ -19,14 +19,13 @@ public class MainMenuScreen extends ScreenAdapter {
 
 
     private Stage stage;
-    private TextButton startButton, exitButton;
+    private TextButton startButton, exitButton, settingsButton;
     private Actor actor;
     private TextButton.TextButtonStyle style;
     private TextureAtlas atlas;
     private BitmapFont font;
     private Table table;
     private Skin skin;
-
 
 
     public MainMenuScreen(){
@@ -40,22 +39,26 @@ public class MainMenuScreen extends ScreenAdapter {
         style.down = new TextureRegionDrawable(atlas.findRegion("default-rect-down"));
         table = new Table();
 
-        actor = new Actor();
+        //actor = new Actor();
         font = new BitmapFont(new FileHandle("./default.fnt"));
         style.font = font;
 
         stage = new Stage();
         startButton = new TextButton("START",skin);
         exitButton = new TextButton("EXIT",skin);
+        settingsButton = new TextButton("SETTINGS",skin);
 
         startButton.setColor(Color.YELLOW);
+        settingsButton.setColor(Color.BLUE);
 
         table.setFillParent(true);
-        table.setDebug(true);
+        table.setDebug(false); //debugger
         table.row();
         table.add(startButton);
         table.row();
         table.add(exitButton);
+        table.row();
+        table.add(settingsButton);
 
         table.setHeight(Gdx.graphics.getHeight());
         table.setWidth(Gdx.graphics.getWidth());

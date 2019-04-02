@@ -1,1 +1,4 @@
-defaultClass: TextureAtlas
+defaultClass: Texture
+prefix: 'atlas'
+classes:
+  atlas: TextureAtlas

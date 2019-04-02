@@ -46,6 +46,7 @@ assetLoaders:
 # assets
 assets:
   - './textures'
+  - './atlases'
 
 # game settings
 #settingsFile: './default-settings.yml'

@@ -91,8 +91,13 @@ public class Assets {
     for(String dir : presets.getAssetDirs()){
       FileHandle indexHandle = fileResolver.resolve(String.format("%s/index.yml", dir));
       AssetsIndex index = getSync(new AssetDescriptor<>(indexHandle, AssetsIndex.class));
-      Class<T> assetClass = (Class<T>)presets.resolveAlias(index.getClassName());
+      Class<T> defaultClass = (Class<T>)presets.resolveAlias(index.getClassName());
       for(FileHandle assetFile : fileResolver.resolve(dir).list()){
+        Class<T> assetClass = defaultClass;
+        String ext = assetFile.extension();
+        if(index.hasClassFor(ext)){
+          assetClass = (Class<T>)presets.resolveAlias(index.getClassFor(ext));
+        }
         if (!assetFile.equals(indexHandle)) {
           // assign name to asset after loading
           awaitList.add(getAsync(new AssetDescriptor<T>(assetFile, assetClass)).map((T asset) -> {

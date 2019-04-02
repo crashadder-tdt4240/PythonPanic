@@ -44,10 +44,8 @@ public class Assets {
     assetManager.setLoader(AssetsPresets.class, new YamlLoader<AssetsPresets>(fileResolver, AssetsPresets.class));
     assetManager.setLoader(AssetsIndex.class, new YamlLoader<AssetsIndex>(fileResolver, AssetsIndex.class));
 
-    AssetsIndex test = getSync("./textures/index.yml", AssetsIndex.class);
     presets = getSync("./assets.yml", AssetsPresets.class);
 
-    System.out.println(test.getClassName());
     // set up loaders
 
     for(Entry<Class<AssetLoader<?, ?>>, ArrayList<Class<?>>> kp : presets.getAssetLoaders().entrySet()) {
@@ -164,11 +162,5 @@ public class Assets {
     }
   }
   
-
-  private class AssetIndex{
-    public String prefix;
-    public String defaultClass;
-
-  }
 
 }

@@ -1,6 +1,8 @@
 package com.tdt4240.game.views;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -15,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 
-public class MainMenuScreen extends ScreenAdapter {
+public class MainMenuScreen extends ScreenAdapter implements Screen {
 
 
     private Stage stage;
@@ -26,9 +28,11 @@ public class MainMenuScreen extends ScreenAdapter {
     private BitmapFont font;
     private Table table;
     private Skin skin;
+    private Game game;
 
 
-    public MainMenuScreen(){
+    public MainMenuScreen(Game game){
+        this.game = game;
 
         atlas = new TextureAtlas(new FileHandle("./uiskin.atlas"));
         skin = new Skin(new FileHandle("./uiskin.json"));
@@ -73,4 +77,5 @@ public class MainMenuScreen extends ScreenAdapter {
     public Stage getStage(){
         return stage;
     }
+
 }

@@ -114,7 +114,7 @@ public class EcsEngine{
     }
     acc -= worldDelta*ticks;
     tickCounter += ticks;
-    //debugRenderer.render(bWorld, cam1.combined);
+    debugRenderer.render(bWorld, cam1.combined);
   }
 
 }

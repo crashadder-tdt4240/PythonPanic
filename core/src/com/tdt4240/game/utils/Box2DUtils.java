@@ -1,8 +1,10 @@
 package com.tdt4240.game.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -40,6 +42,20 @@ public class Box2DUtils{
     shape.setRadius(7);
     density = 1;
     filter.categoryBits = Category.PLAYER;
+  }};
+
+  public static final FixtureDef WALL_FIXTURE_DEF = new FixtureDef(){{
+    ChainShape chainShape = new ChainShape();
+    Vector2[] vertices = new Vector2[5];
+    vertices[0] = new Vector2(0, 0);
+    vertices[1] = new Vector2(Gdx.graphics.getWidth(), 0);
+    vertices[2] = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    vertices[3] = new Vector2(0, Gdx.graphics.getHeight());
+    vertices[4] = new Vector2(0, 0);
+    chainShape.createChain(vertices);
+    shape = chainShape;
+    filter.categoryBits = Category.WALL;
+    density = 1;
   }};
 
   public static Body createBody(World world, BodyDef bodyDef, FixtureDef ...fixtureDefs){

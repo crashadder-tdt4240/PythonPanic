@@ -50,10 +50,12 @@ public class TestMap{
     Decal sprite = Decal.newDecal(16, 16, new TextureRegion(testTexture), true);  
     Decal sprite2 = Decal.newDecal(16, 16, new TextureRegion(testTexture), true);
 
-    Body body1 = Box2DUtils.createBody(physicsWorld, Box2DUtils.KINEMATIC_BODY_DEF, Box2DUtils.PLAYER_FIXTURE_DEF);
+    Body body1 = Box2DUtils.createBody(physicsWorld, Box2DUtils.DYNAMIC_BODY_DEF, Box2DUtils.PLAYER_FIXTURE_DEF);
     Body body2 = Box2DUtils.createBody(physicsWorld, Box2DUtils.DYNAMIC_BODY_DEF, Box2DUtils.PLAYER_FIXTURE_DEF);
+    Body wall = Box2DUtils.createBody(physicsWorld, Box2DUtils.STATIC_BODY_DEF, Box2DUtils.WALL_FIXTURE_DEF);
     int entity1 = world.create();
     int entity2 = world.create();
+    int wallEntity = world.create();
     int surfaceEntity = world.create();
 
     ComponentMapper<Box2dComponent> box2dMapper = world.getMapper(Box2dComponent.class);
@@ -70,6 +72,9 @@ public class TestMap{
 
     Box2dComponent box2dComponent2 = box2dMapper.create(entity2);
     TransformComponent transformComponent2 = transformMapper.create(entity2);
+
+    Box2dComponent box2dComponent3 = box2dMapper.create(wallEntity);
+    box2dComponent3.body = wall;
 
     TransformComponent transformComponent3 = transformMapper.create(surfaceEntity);
 
@@ -95,6 +100,7 @@ public class TestMap{
     transformComponent.transform.translate(0, 0, -50);
     transformComponent2.transform.translate(0, 0, -50);
     transformComponent3.transform.translate(0, 0, -100);
+
    // transformComponent3.transform.rotate(0, 1, 0, 60f);
 
     spriteComponent1.sprite = sprite;

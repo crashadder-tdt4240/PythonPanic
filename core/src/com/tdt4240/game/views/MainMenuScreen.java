@@ -8,7 +8,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -28,11 +27,9 @@ public class MainMenuScreen extends ScreenAdapter implements Screen {
     private BitmapFont font;
     private Table table;
     private Skin skin;
-    private Game game;
 
 
-    public MainMenuScreen(Game game){
-        this.game = game;
+    public MainMenuScreen(){
 
         atlas = new TextureAtlas(new FileHandle("./uiskin.atlas"));
         skin = new Skin(new FileHandle("./uiskin.json"));

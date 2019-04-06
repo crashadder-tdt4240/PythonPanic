@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.tdt4240.game.assets.Assets;
 import com.tdt4240.game.ecs.components.Box2dComponent;
 import com.tdt4240.game.ecs.components.DrawComponent;
 import com.tdt4240.game.ecs.components.PixmapComponent;
@@ -35,7 +36,7 @@ public class TestMap{
     Pixmap surface = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Format.RGB888);
     Texture surfaceTexture = new Texture(surface);
 
-    Texture testTexture = new Texture(Gdx.files.internal("test.png"));
+    Texture testTexture = Assets.getInstance().getAsset("texture.test");//new Texture(Gdx.files.internal("textures/test.png"));
     //surfaceTexture.bind(1);
     //Gdx.gl.glActiveTexture(0);
 

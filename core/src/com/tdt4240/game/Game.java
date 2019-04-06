@@ -2,6 +2,7 @@ package com.tdt4240.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,21 +12,28 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tdt4240.game.controllers.GameController;
+import com.tdt4240.game.controllers.MainMenuController;
 import com.tdt4240.game.ecs.EcsEngine;
 import com.tdt4240.game.views.GameScreen;
+import com.tdt4240.game.views.MainMenuScreen;
+import com.tdt4240.game.views.SplashScreen;
 
 public class Game extends ApplicationAdapter {
   
   private EcsEngine engine;
-  private GameController controller;
-  private GameScreen screen;
+  private MainMenuController controller;
+  private MainMenuScreen screen;
+  private SplashScreen splashScreen;
+
   @Override
   public void create () {
     GLSettings.create();
     engine = new EcsEngine();
-    controller = new GameController(engine);
-    screen = new GameScreen(engine);
-    Gdx.input.setInputProcessor(controller);
+    screen = new MainMenuScreen();
+    controller = new MainMenuController(screen);
+    splashScreen = new SplashScreen();
+
+    //Gdx.input.setInputProcessor(controller);
   }
 
   @Override
@@ -34,7 +42,8 @@ public class Game extends ApplicationAdapter {
     engine.update(delta);
     
     GLSettings.preRender();
-    screen.render(delta);
+    //screen.render(delta);
+    splashScreen.render(delta); //her??
     GLSettings.postRender();
     
   }

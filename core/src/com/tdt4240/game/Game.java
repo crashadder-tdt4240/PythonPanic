@@ -4,30 +4,22 @@ import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.tdt4240.game.assets.Assets;
-import com.tdt4240.game.controllers.GameController;
-import com.tdt4240.game.ecs.EcsEngine;
-import com.tdt4240.game.views.GameScreen;
 
-import io.reactivex.functions.Consumer;
+import com.tdt4240.game.assets.Assets;
+import com.tdt4240.game.controllers.MainMenuController;
+import com.tdt4240.game.ecs.EcsEngine;
+import com.tdt4240.game.views.MainMenuScreen;
+import com.tdt4240.game.views.SplashScreen;
+
 
 public class Game extends ApplicationAdapter {
   
   private EcsEngine engine;
-  private GameController controller;
-  private GameScreen screen;
   private boolean preloaded = false;
 
   private Assets assets;
+  private MainMenuController controller;
+  private MainMenuScreen screen;
 
   @Override
   public void create () {
@@ -39,12 +31,12 @@ public class Game extends ApplicationAdapter {
       for(Object obj : assets){
         System.out.println(obj);
       }
-      engine = new EcsEngine();
-      controller = new GameController(engine);
-      screen = new GameScreen(engine);
+      screen = new MainMenuScreen();
+      controller = new MainMenuController(screen);
       preloaded = true;
       Gdx.input.setInputProcessor(controller);
     });
+
   }
 
   @Override
@@ -57,6 +49,7 @@ public class Game extends ApplicationAdapter {
       screen.render(delta);
       GLSettings.postRender();
     }
+
   }
 
   @Override

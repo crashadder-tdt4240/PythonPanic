@@ -6,10 +6,15 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 
 import com.tdt4240.game.assets.Assets;
-import com.tdt4240.game.controllers.MainMenuController;
+import com.tdt4240.game.mvc.MVC;
+import com.tdt4240.game.mvc.MVCManager;
+import com.tdt4240.game.mvc.MainMenuMVC;
+import com.tdt4240.game.mvc.controllers.MainMenuController;
+import com.tdt4240.game.mvc.models.GdxStageModel;
+import com.tdt4240.game.mvc.models.MainMenuModel;
 import com.tdt4240.game.ecs.EcsEngine;
-import com.tdt4240.game.views.MainMenuScreen;
-import com.tdt4240.game.views.SplashScreen;
+import com.tdt4240.game.mvc.views.GdxScreenView;
+import com.tdt4240.game.mvc.views.SplashScreen;
 
 
 public class Game extends ApplicationAdapter {
@@ -18,23 +23,30 @@ public class Game extends ApplicationAdapter {
   private boolean preloaded = false;
 
   private Assets assets;
-  private MainMenuController controller;
-  private MainMenuScreen screen;
+
+  private MVCManager manager = new MVCManager();
+
+  private MVC<MainMenuModel, GdxScreenView<MainMenuModel>, MainMenuController> mainMenuMVC;
 
   @Override
   public void create () {
     GLSettings.create();
     assets = Assets.getInstance();
     assets.setup();
+
+    mainMenuMVC = new MainMenuMVC();
+    manager.registerMVC("MAIN_MENU", mainMenuMVC);
+
+
+
     assets.preload().subscribe((List<?> assets) -> {
       System.out.println("All assets finished loading!");
       for(Object obj : assets){
         System.out.println(obj);
       }
-      screen = new MainMenuScreen();
-      controller = new MainMenuController(screen);
+      manager.createMVC("MAIN_MENU");
+      Gdx.input.setInputProcessor(manager.getInputProcessor());
       preloaded = true;
-      Gdx.input.setInputProcessor(controller);
     });
 
   }
@@ -44,9 +56,9 @@ public class Game extends ApplicationAdapter {
     float delta = Gdx.graphics.getDeltaTime();
     assets.loadUpdate();
     if(preloaded){
-      engine.update(delta);
+      manager.update(delta);
       GLSettings.preRender();
-      screen.render(delta);
+      manager.render(delta);
       GLSettings.postRender();
     }
 

@@ -1,4 +1,4 @@
-package com.tdt4240.game.controllers;
+package com.tdt4240.game.mvc.controllers;
 
 import java.util.Vector;
 

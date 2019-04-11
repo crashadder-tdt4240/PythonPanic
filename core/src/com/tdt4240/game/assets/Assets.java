@@ -101,7 +101,7 @@ public class Assets {
         if (!assetFile.equals(indexHandle)) {
           // assign name to asset after loading
           awaitList.add(getAsync(new AssetDescriptor<T>(assetFile, assetClass)).map((T asset) -> {
-            String assetName = String.format(index.resolvePrefix(assetFile.nameWithoutExtension()));
+            String assetName = String.format(index.resolvePrefix(assetFile.name()));
             System.out.printf("Asset loaded %s\n", assetName);
             assetMap.put(assetName, asset);
             return asset;

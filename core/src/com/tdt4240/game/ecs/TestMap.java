@@ -36,7 +36,7 @@ public class TestMap{
     Pixmap surface = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Format.RGB888);
     Texture surfaceTexture = new Texture(surface);
 
-    Texture testTexture = Assets.getInstance().getAsset("texture.test");//new Texture(Gdx.files.internal("textures/test.png"));
+    Texture testTexture = Assets.getInstance().getAsset("texture.test.png");//new Texture(Gdx.files.internal("textures/test.png"));
     //surfaceTexture.bind(1);
     //Gdx.gl.glActiveTexture(0);
 

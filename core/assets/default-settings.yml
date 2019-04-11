@@ -1,6 +1,6 @@
 
-
-
+#music volume, between 0 and 1
 music: 1
+#effect volume, between 0 and 1
 effects: 1
 colorblind: false

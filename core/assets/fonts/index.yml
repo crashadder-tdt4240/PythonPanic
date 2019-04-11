@@ -1,0 +1,6 @@
+
+prefix: 'font'
+defaultClass: 'Texture'
+
+classes:
+  fnt: BitmapFont

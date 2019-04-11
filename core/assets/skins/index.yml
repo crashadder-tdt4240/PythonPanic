@@ -1,0 +1,6 @@
+defaultClass: Texture
+prefix: 'skin'
+classes:
+  atlas: TextureAtlas
+  json: Skin
+

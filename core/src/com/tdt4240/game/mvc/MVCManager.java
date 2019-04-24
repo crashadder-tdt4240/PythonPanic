@@ -10,47 +10,42 @@ import com.tdt4240.game.mvc.views.MVCView;
 
 import java.util.HashMap;
 
-public class MVCManager implements MVCInterface {
-    private MVCView<?> currentView;
-    private MVCController currentController;
+public class MVCManager {
+    private MVC<?, ?, ?> currentMVC;
     private InputMultiplexer multiplexer;
+    private static MVCManager instance = new MVCManager();
     private HashMap<String, MVC> mvcMap = new HashMap<String, MVC>();
 
-    public MVCManager(){
+    private MVCManager(){
         multiplexer = new InputMultiplexer();
     }
 
-    @Override
-    public MVCView getView() {
-        return this.currentView;
+    public static MVCManager getInstance(){
+        return instance;
     }
 
-    @Override
-    public MVCController getController() {
-        return this.currentController;
+    public MVC getMVC(){
+        return currentMVC;
     }
-
     public void registerMVC(String name, MVC mvc){
         mvcMap.put(name,mvc);
     }
 
     public void createMVC(String name){
-        if(this.currentController != null){
-            multiplexer.removeProcessor(this.currentController);
+        if(currentMVC != null){
+            multiplexer.removeProcessor(this.currentMVC.getController().getInputManager());
         }
-        MVC<?,?,?> mvc = mvcMap.get(name);
-        mvc.create();
-        this.currentController = mvc.getController();
-        this.currentView = mvc.getView();
-        multiplexer.addProcessor(this.currentController.getInputManager());
+        currentMVC = mvcMap.get(name);
+        currentMVC.create();
+        multiplexer.addProcessor(currentMVC.getController().getInputManager());
     }
 
     public void render(float delta){
-        this.currentView.render(delta);
+        currentMVC.getView().render(delta);
     }
 
     public void update(float delta){
-
+        currentMVC.getModel().update(delta);
     }
 
     public InputProcessor getInputProcessor(){

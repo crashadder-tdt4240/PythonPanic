@@ -11,30 +11,22 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
 import com.tdt4240.game.ecs.EcsEngine;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
+import com.tdt4240.game.mvc.models.GameModel;
+import com.tdt4240.game.mvc.views.GameView;
 
-public class GameController extends InputAdapter{
+public class GameController extends MVCController<GameView, GameModel>{
   
-  private EcsEngine engine;
 
-  private IntBag entities;
 
-  private ComponentMapper<PlayerInputComponent> pComponentMapper;
-
-  public GameController(EcsEngine engine){
-    this.engine = engine;
-    this.pComponentMapper = engine.getMapper(PlayerInputComponent.class);
+  public GameController(GameView view, GameModel model){
+    super(view, model);
   }
 
-  private void updateEntities(){
-    entities = engine.getEntities(Aspect.all(PlayerInputComponent.class));
-  }
+
 
   private void updateInput(Vector2 newInput){
-    updateEntities();
-    for(int i = 0; i < entities.size(); i++){
-      int entity = entities.get(i);
-      PlayerInputComponent playerInputComponent = pComponentMapper.get(entity);
-      playerInputComponent.steerInput.add(newInput);
+    for(PlayerInputComponent playerInputs : getModel().getPlayerInputs()){
+      playerInputs.steerInput.add(newInput);
     }
   }
 

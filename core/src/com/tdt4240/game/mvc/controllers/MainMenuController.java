@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.tdt4240.game.mvc.MVCManager;
 import com.tdt4240.game.mvc.models.GdxStageModel;
 import com.tdt4240.game.mvc.models.MainMenuModel;
 import com.tdt4240.game.mvc.views.GdxScreenView;
@@ -24,7 +25,16 @@ public class MainMenuController extends MVCController<GdxScreenView<MainMenuMode
             if(event instanceof InputEvent){
                 InputEvent ievent = (InputEvent)event;
                 if(ievent.getType() == InputEvent.Type.touchUp){
-                    System.out.println("Button pressed");
+                    MVCManager.getInstance().createMVC("GAME");
+                } 
+            }
+        });
+
+        model.onEvent("EXIT").subscribe((Event event) -> {
+            if(event instanceof InputEvent){
+                InputEvent ievent = (InputEvent)event;
+                if(ievent.getType() == InputEvent.Type.touchUp){
+                    Gdx.app.exit();
                 } 
             }
         });

@@ -12,7 +12,7 @@ public class MainMenuMVC extends MVC<MainMenuModel, GdxScreenView<MainMenuModel>
   
   public void create(){
     setModel(new MainMenuModel());
-    setView(new GdxScreenView(getModel()));
+    setView(new GdxScreenView<MainMenuModel>(getModel()));
     setController(new MainMenuController(getView(), getModel()));
   }
 }

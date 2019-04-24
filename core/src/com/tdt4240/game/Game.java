@@ -6,6 +6,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 
 import com.tdt4240.game.assets.Assets;
+import com.tdt4240.game.mvc.LoadingMVC;
 import com.tdt4240.game.mvc.MVC;
 import com.tdt4240.game.mvc.MVCManager;
 import com.tdt4240.game.mvc.MainMenuMVC;
@@ -19,49 +20,29 @@ import com.tdt4240.game.mvc.views.SplashScreen;
 
 public class Game extends ApplicationAdapter {
   
-  private EcsEngine engine;
-  private boolean preloaded = false;
 
   private Assets assets;
 
-  private MVCManager manager = new MVCManager();
-
-  private MVC<MainMenuModel, GdxScreenView<MainMenuModel>, MainMenuController> mainMenuMVC;
+  private MVCManager manager = MVCManager.getInstance();
 
   @Override
   public void create () {
     GLSettings.create();
     assets = Assets.getInstance();
     assets.setup();
+    MVCSetup.setup();
 
-    mainMenuMVC = new MainMenuMVC();
-    manager.registerMVC("MAIN_MENU", mainMenuMVC);
-
-
-
-    assets.preload().subscribe((List<?> assets) -> {
-      System.out.println("All assets finished loading!");
-      for(Object obj : assets){
-        System.out.println(obj);
-      }
-      manager.createMVC("MAIN_MENU");
-      Gdx.input.setInputProcessor(manager.getInputProcessor());
-      preloaded = true;
-    });
 
   }
 
   @Override
   public void render () {
     float delta = Gdx.graphics.getDeltaTime();
-    assets.loadUpdate();
-    if(preloaded){
-      manager.update(delta);
-      GLSettings.preRender();
-      manager.render(delta);
-      GLSettings.postRender();
-    }
-
+    //assets.loadUpdate();
+    manager.update(delta);
+    GLSettings.preRender();
+    manager.render(delta);
+    GLSettings.postRender();
   }
 
   @Override

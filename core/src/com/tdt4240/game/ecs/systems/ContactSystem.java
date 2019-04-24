@@ -49,8 +49,9 @@ public class ContactSystem extends IteratingSystem implements ContactListener{
   private void updateContact(int entity1, int entity2, boolean contact){
     if(entity1 > 0){
       Box2dComponent box2dComponent1 = box2dMapper.get(entity1);
-      box2dComponent1.contact = true;
+      box2dComponent1.contact = contact;
       box2dComponent1.contactWith = entity2;
+      System.out.printf("Update contact %d %d %b\n", entity1, entity2, contact);
     }
   }
   // move common code to updateContact

@@ -1,5 +1,6 @@
 package com.tdt4240.game.ecs;
 
+import com.artemis.Aspect;
 import com.artemis.Component;
 import com.artemis.ComponentMapper;
 import com.artemis.ComponentType;
@@ -33,6 +34,7 @@ import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
 import com.tdt4240.game.ecs.systems.ContactSystem;
 import com.tdt4240.game.ecs.systems.DrawSystem;
+import com.tdt4240.game.ecs.systems.KillBoxSystem;
 import com.tdt4240.game.ecs.systems.PhysicsSystem;
 import com.tdt4240.game.ecs.systems.PlayerInputSystem;
 import com.tdt4240.game.ecs.systems.SnakeSystem;
@@ -41,12 +43,12 @@ import com.tdt4240.game.utils.Box2DUtils;
 
 public class EcsEngine{
   private World world;
-  private int tps = 128;
+  private int tps = 120;
   private int tickCounter = 0;
   private float acc = 0;
 
   private com.badlogic.gdx.physics.box2d.World bWorld;
-  private Box2DDebugRenderer debugRenderer;
+
   Camera cam1 = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
   public EcsEngine(){
     
@@ -56,7 +58,7 @@ public class EcsEngine{
     PhysicsSystem physicsSystem = new PhysicsSystem();
     SpriteSystem spriteSystem = new SpriteSystem();
     SnakeSystem snakeSystem = new SnakeSystem();
-
+    KillBoxSystem killBoxSystem = new KillBoxSystem();
     WorldConfiguration config = new WorldConfigurationBuilder()
       .with(drawSystem)
       .with(contactSystem)
@@ -64,6 +66,7 @@ public class EcsEngine{
       .with(physicsSystem)
       .with(spriteSystem)
       .with(snakeSystem)
+      .with(killBoxSystem)
       .build();
     
 
@@ -72,18 +75,16 @@ public class EcsEngine{
     world = new World(config);
     bWorld = new com.badlogic.gdx.physics.box2d.World(new Vector2(), false);
     bWorld.setContactListener(contactSystem);
-    debugRenderer = new Box2DDebugRenderer(
-      true,
-      true,
-      true,
-      true,
-      true,
-      true
-    );
+
+    addEntityListener(Aspect.one(Box2dComponent.class), new Box2dEntityListener(world, bWorld));
 
     TestMap testMap = new TestMap(world, bWorld);
     testMap.setup();
 
+  }
+
+  public com.badlogic.gdx.physics.box2d.World getBox2dWorld(){
+    return bWorld;
   }
 
   public <T extends Component> ComponentMapper<T> getMapper(Class<T> cls){
@@ -106,15 +107,37 @@ public class EcsEngine{
     acc += dtime;
     int ticks = (int) (tps*acc);
     float worldDelta = 1f/tps;
-    bWorld.step(dtime, 4, 4);
     for(int i=0; i < ticks; i++){
       // The documentation sugests setting delta before each process call
       this.world.setDelta(worldDelta);
+      bWorld.step(worldDelta, 8, 3);
       world.process();
     }
     acc -= worldDelta*ticks;
     tickCounter += ticks;
-    //debugRenderer.render(bWorld, cam1.combined);
+    Gdx.graphics.setTitle(String.format("Game, TPS: %d, ticks: %d, ttp: %d", tps, tickCounter, ticks));
   }
-
+  private class Box2dEntityListener implements SubscriptionListener{
+    private ComponentMapper<Box2dComponent> bComponentMapper;
+    private com.badlogic.gdx.physics.box2d.World bWorld;
+    public Box2dEntityListener(World world, com.badlogic.gdx.physics.box2d.World bWorld){
+      bComponentMapper = world.getMapper(Box2dComponent.class);
+      this.bWorld = bWorld;
+    }
+    
+    @Override
+    public void removed(IntBag entities) {
+      for(int i=0; i < entities.size(); i++){
+        int entity = entities.get(i);
+        Box2dComponent component = bComponentMapper.get(entity);
+        if(component.body != null){
+          bWorld.destroyBody(component.body);
+        }
+      }
+    }
+    @Override
+    public void inserted(IntBag entities) {
+      
+    }
+  }
 }

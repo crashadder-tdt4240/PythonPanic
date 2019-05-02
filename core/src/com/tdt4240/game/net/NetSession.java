@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import com.badlogic.gdx.net.Socket;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 

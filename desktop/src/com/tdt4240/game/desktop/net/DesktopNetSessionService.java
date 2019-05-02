@@ -7,7 +7,6 @@ import com.tdt4240.game.net.NetSession;
 import com.tdt4240.game.net.NetSessionService;
 import com.tdt4240.game.net.NetUser;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class DesktopNetSessionService implements NetSessionService{

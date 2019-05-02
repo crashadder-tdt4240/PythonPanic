@@ -1,6 +1,5 @@
 package com.tdt4240.game.net;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface NetSessionService{

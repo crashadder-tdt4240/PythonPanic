@@ -7,7 +7,7 @@ import com.tdt4240.game.mvc.models.LoadingModel;
 import com.tdt4240.game.mvc.views.GameView;
 import com.tdt4240.game.mvc.views.LoadingView;
 
-public class GameMVC extends MVC<GameModel, GameView, GameController>{
+public class GameMVC extends MVC<GameModel, GameView, GameController, MVCParams<GameModel, GameView, GameController>>{
   public GameMVC(){
 
   }

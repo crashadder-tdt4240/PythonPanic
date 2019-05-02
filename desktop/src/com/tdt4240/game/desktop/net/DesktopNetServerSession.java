@@ -3,12 +3,6 @@ package com.tdt4240.game.desktop.net;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.badlogic.gdx.Net.Protocol;
-import com.badlogic.gdx.net.NetJavaServerSocketImpl;
-import com.badlogic.gdx.net.ServerSocket;
-import com.badlogic.gdx.net.ServerSocketHints;
-import com.badlogic.gdx.net.Socket;
-import com.badlogic.gdx.net.SocketHints;
 import com.tdt4240.game.net.INetServerSocket;
 import com.tdt4240.game.net.INetSocket;
 import com.tdt4240.game.net.NetServerSocket;

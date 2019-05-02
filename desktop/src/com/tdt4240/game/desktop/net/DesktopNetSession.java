@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.Socket;
 import com.tdt4240.game.net.NetSession;
 import com.tdt4240.game.net.NetUser;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public class DesktopNetSession implements NetSession{

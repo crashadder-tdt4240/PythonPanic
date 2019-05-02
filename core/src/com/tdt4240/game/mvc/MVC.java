@@ -6,7 +6,7 @@ import com.tdt4240.game.mvc.controllers.MVCController;
 import com.tdt4240.game.mvc.models.MVCModel;
 import com.tdt4240.game.mvc.views.MVCView;
 
-public abstract class MVC<M extends MVCModel, V extends MVCView<M>, C extends MVCController<V, M>> {
+public abstract class MVC<M extends MVCModel, V extends MVCView<M>, C extends MVCController<V, M>, P extends MVCParams<M, V, C>> {
     private M model;
     private V view;
     private C controller;
@@ -14,6 +14,9 @@ public abstract class MVC<M extends MVCModel, V extends MVCView<M>, C extends MV
 
 
     public abstract void create();
+    public void create(P params){
+        create();
+    }
 
     public M getModel() {
         return model;
@@ -38,6 +41,7 @@ public abstract class MVC<M extends MVCModel, V extends MVCView<M>, C extends MV
     public C getController() {
         return controller;
     }
+
 }
 
 

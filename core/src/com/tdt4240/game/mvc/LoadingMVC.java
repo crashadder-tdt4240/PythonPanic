@@ -4,7 +4,7 @@ import com.tdt4240.game.mvc.controllers.LoadingController;
 import com.tdt4240.game.mvc.models.LoadingModel;
 import com.tdt4240.game.mvc.views.LoadingView;
 
-public class LoadingMVC extends MVC<LoadingModel, LoadingView, LoadingController>{
+public class LoadingMVC extends MVC<LoadingModel, LoadingView, LoadingController, MVCParams<LoadingModel, LoadingView, LoadingController>>{
   public LoadingMVC(){
 
   }

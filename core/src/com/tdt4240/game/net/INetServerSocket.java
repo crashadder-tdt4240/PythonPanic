@@ -4,7 +4,7 @@ import io.reactivex.Observable;
 
 public interface INetServerSocket{
 
-  public void bind(String address, int port)
+  public void bind(String address, int port);
   
   // how many connections to accept
   public Observable<INetSocket> accept(int count);

@@ -11,6 +11,9 @@ import com.tdt4240.game.mvc.MVCManager;
 import com.tdt4240.game.mvc.models.GdxStageModel;
 import com.tdt4240.game.mvc.models.MainMenuModel;
 import com.tdt4240.game.mvc.views.GdxScreenView;
+import com.tdt4240.game.net.NetInst;
+import com.tdt4240.game.net.NetSession;
+import com.tdt4240.game.net.NetUser;
 
 public class MainMenuController extends MVCController<GdxScreenView<MainMenuModel>, MainMenuModel> {
     
@@ -35,6 +38,32 @@ public class MainMenuController extends MVCController<GdxScreenView<MainMenuMode
                 InputEvent ievent = (InputEvent)event;
                 if(ievent.getType() == InputEvent.Type.touchUp){
                     Gdx.app.exit();
+                } 
+            }
+        });
+
+        model.onEvent("HOST").subscribe((Event event) -> {
+            if(event instanceof InputEvent){
+                InputEvent ievent = (InputEvent)event;
+                if(ievent.getType() == InputEvent.Type.touchUp){
+                    NetInst.userService.signIn().subscribe((NetUser user) -> {
+                        NetInst.sessionService.hostSession(user).subscribe((NetSession session) -> {
+                            System.out.println("Host session created");
+                        });
+                    });
+                } 
+            }
+        });
+
+        model.onEvent("JOIN").subscribe((Event event) -> {
+            if(event instanceof InputEvent){
+                InputEvent ievent = (InputEvent)event;
+                if(ievent.getType() == InputEvent.Type.touchUp){
+                    NetInst.userService.signIn().subscribe((NetUser user) -> {
+                        NetInst.sessionService.clientSession(user).subscribe((NetSession session) -> {
+                            System.out.println("Client session created");
+                        });
+                    });
                 } 
             }
         });

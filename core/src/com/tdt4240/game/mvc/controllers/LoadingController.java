@@ -11,7 +11,7 @@ public class LoadingController extends MVCController<LoadingView, LoadingModel>{
     super(view, model);
 
     Assets.getInstance().preload().subscribe((Object obj) -> {
-        MVCManager.getInstance().createMVC("MAIN_MENU");
-      });
+      MVCManager.getInstance().createMVC("MAIN_MENU");
+    });
   }
 }

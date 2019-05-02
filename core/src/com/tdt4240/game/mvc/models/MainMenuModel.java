@@ -29,14 +29,22 @@ public class MainMenuModel extends GdxStageModel{
     
     stage = new Stage();
     startButton = new TextButton("START",skin);
+
     exitButton = new TextButton("EXIT",skin);
     settingsButton = new TextButton("SETTINGS",skin);
 
     startButton.setColor(Color.YELLOW);
     settingsButton.setColor(Color.BLUE);
 
+    TextButton hostButton = new TextButton("HOST", skin);
+    TextButton joinButton = new TextButton("JOIN", skin);
+
     table.setFillParent(true);
     table.setDebug(false); //debugger
+    table.row();
+    table.add(hostButton);
+    table.row();
+    table.add(joinButton);
     table.row();
     table.add(startButton);
     table.row();
@@ -50,6 +58,8 @@ public class MainMenuModel extends GdxStageModel{
 
 
     bindActor("START", startButton);
+    bindActor("HOST", hostButton);
+    bindActor("JOIN", joinButton);
     bindActor("EXIT", exitButton);
 
 

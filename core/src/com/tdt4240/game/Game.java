@@ -6,16 +6,12 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 
 import com.tdt4240.game.assets.Assets;
-import com.tdt4240.game.mvc.LoadingMVC;
-import com.tdt4240.game.mvc.MVC;
+
 import com.tdt4240.game.mvc.MVCManager;
-import com.tdt4240.game.mvc.MainMenuMVC;
-import com.tdt4240.game.mvc.controllers.MainMenuController;
-import com.tdt4240.game.mvc.models.GdxStageModel;
-import com.tdt4240.game.mvc.models.MainMenuModel;
-import com.tdt4240.game.ecs.EcsEngine;
-import com.tdt4240.game.mvc.views.GdxScreenView;
-import com.tdt4240.game.mvc.views.SplashScreen;
+
+import com.tdt4240.game.net.NetInst;
+import com.tdt4240.game.net.NetSessionService;
+import com.tdt4240.game.net.NetUserService;
 
 
 public class Game extends ApplicationAdapter {
@@ -25,14 +21,17 @@ public class Game extends ApplicationAdapter {
 
   private MVCManager manager = MVCManager.getInstance();
 
+  public Game(NetSessionService sessionService, NetUserService userService){
+    NetInst.sessionService = sessionService;
+    NetInst.userService = userService;
+  }
+
   @Override
   public void create () {
     GLSettings.create();
     assets = Assets.getInstance();
     assets.setup();
     MVCSetup.setup();
-
-
   }
 
   @Override

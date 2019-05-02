@@ -99,6 +99,10 @@ public class EcsEngine{
     return world.getAspectSubscriptionManager().get(filter).getEntities();
   }
 
+  public int getProcessedTicks(){
+    return this.tickCounter;
+  }
+
   public void setTPS(int tps){
     this.tps = tps;
   }

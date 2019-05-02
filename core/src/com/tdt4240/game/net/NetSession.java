@@ -17,10 +17,10 @@ public interface NetSession{
   public List<NetUser> getConnectedUsers();
   public Observable<NetUser> onUserLeft();
   public Observable<NetUser> onUserJoin();
-  public Completable onSessionStart();
 
   public void leaveSession();
 
+  public void dispose();
 
   // get socket to user
   public Socket getSocket(NetUser user);

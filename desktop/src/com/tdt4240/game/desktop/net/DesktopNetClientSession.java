@@ -12,6 +12,7 @@ import com.tdt4240.game.net.session.NetUser;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.subjects.SingleSubject;
 
 public class DesktopNetClientSession extends DesktopNetSession{
   
@@ -27,9 +28,11 @@ public class DesktopNetClientSession extends DesktopNetSession{
     System.out.println("Connecting");
     INetSocket socket = new NetSocket();
     socket.bind("localhost", 8888);
+    
+    SingleSubject<MessageSocket> callback = SingleSubject.create();
+    
 
-    return socket.connect().toObservable().map((Object obj) -> {
-      return new MessageSocket(socket);
+    socket.connect().subscribe(() -> {
       this.socket = new MessageSocket(socket);
       System.out.println("Connected");
       System.out.println(this.socket);
@@ -46,8 +49,10 @@ public class DesktopNetClientSession extends DesktopNetSession{
         System.out.println("User joined session " + userId.toString());
         
       });
-      return this.socket;
-    }).singleOrError();
+      callback.onSuccess(this.socket);
+      
+    });
+    return callback;
   }
 
   @Override

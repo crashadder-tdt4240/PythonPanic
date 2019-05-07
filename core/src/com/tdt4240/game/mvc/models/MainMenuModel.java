@@ -61,6 +61,7 @@ public class MainMenuModel extends GdxStageModel{
     bindActor("HOST", hostButton);
     bindActor("JOIN", joinButton);
     bindActor("EXIT", exitButton);
+    bindActor("SETTINGS", settingsButton);
 
 
   }

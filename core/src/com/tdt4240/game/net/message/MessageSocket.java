@@ -8,13 +8,14 @@ import com.tdt4240.game.net.INetSocket;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.ReplaySubject;
 import io.reactivex.subjects.Subject;
 
 
 public class MessageSocket implements IMessageSocket, Runnable{
   //private int nextId = 1;
   private boolean disposed = false;
-  private Subject<INetData> messageSubject = BehaviorSubject.create();
+  private Subject<INetData> messageSubject = ReplaySubject.create(4);
   private HashMap<Integer, Subject<INetData>> channelSubjects = new HashMap<>();
   private INetSocket socket;
   
@@ -37,7 +38,10 @@ public class MessageSocket implements IMessageSocket, Runnable{
         NetMessage message = new NetMessage(new NetData(buffer));
         int channel = message.getChannel();
         System.out.printf("Message on channel %d\n", channel);
-        if(channel > 0 && channelSubjects.containsKey(channel)){
+        if(channel > 0){
+          if(!channelSubjects.containsKey(channel)){
+            channelSubjects.put(channel, ReplaySubject.create(4));
+          }      
           channelSubjects.get(channel).onNext(message);
         }
         messageSubject.onNext(message);
@@ -72,7 +76,7 @@ public class MessageSocket implements IMessageSocket, Runnable{
   @Override
   public Observable<INetData> getMessages(int channel) {
     if(!channelSubjects.containsKey(channel)){
-      channelSubjects.put(channel, BehaviorSubject.create());
+      channelSubjects.put(channel, ReplaySubject.create(4));
     }
     return channelSubjects.get(channel);
   }

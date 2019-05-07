@@ -32,6 +32,7 @@ import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.SnakeComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
+import com.tdt4240.game.ecs.managers.NetworkManager;
 import com.tdt4240.game.ecs.systems.ContactSystem;
 import com.tdt4240.game.ecs.systems.DrawSystem;
 import com.tdt4240.game.ecs.systems.KillBoxSystem;
@@ -59,6 +60,9 @@ public class EcsEngine{
     SpriteSystem spriteSystem = new SpriteSystem();
     SnakeSystem snakeSystem = new SnakeSystem();
     KillBoxSystem killBoxSystem = new KillBoxSystem();
+
+    NetworkManager networkManager = new NetworkManager();
+
     WorldConfiguration config = new WorldConfigurationBuilder()
       .with(drawSystem)
       .with(contactSystem)
@@ -67,6 +71,7 @@ public class EcsEngine{
       .with(spriteSystem)
       .with(snakeSystem)
       .with(killBoxSystem)
+      .with(networkManager)
       .build();
     
 
@@ -78,8 +83,8 @@ public class EcsEngine{
 
     addEntityListener(Aspect.one(Box2dComponent.class), new Box2dEntityListener(world, bWorld));
 
-    TestMap testMap = new TestMap(world, bWorld);
-    testMap.setup();
+    //TestMap testMap = new TestMap(world, bWorld);
+    //testMap.setup();
 
   }
 

@@ -8,8 +8,14 @@ import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.tdt4240.game.ecs.EcsEngine;
+import com.tdt4240.game.ecs.GameLevel;
+import com.tdt4240.game.ecs.MpTestMap;
+import com.tdt4240.game.ecs.TestMap;
+import com.tdt4240.game.ecs.components.Box2dComponent;
+import com.tdt4240.game.ecs.components.NetworkComponent;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
+import com.tdt4240.game.ecs.managers.NetworkManager;
 import com.tdt4240.game.mvc.GameMVCParams;
 import com.tdt4240.game.net.message.INetData;
 import com.tdt4240.game.net.message.NetMessage;
@@ -20,32 +26,66 @@ public class GameModel extends MVCModel{
   private ComponentMapper<SpriteComponent> spriteMapper;
   private ComponentMapper<PlayerInputComponent> playerInputMapper;
 
+  private ComponentMapper<NetworkComponent> netMapper;
+  private ComponentMapper<Box2dComponent> box2dMapper;
+
   private GameMVCParams params = new GameMVCParams();
 
   private float acc = 0;
   private float acc2 = 0;
   public GameModel(){
     engine = new EcsEngine();
-
+    
+    
     spriteMapper = engine.getMapper(SpriteComponent.class);
     playerInputMapper = engine.getMapper(PlayerInputComponent.class);
+
+    netMapper = engine.getMapper(NetworkComponent.class);
+    box2dMapper = engine.getMapper(Box2dComponent.class);
 
   }
 
   public GameModel(GameMVCParams params){
     this();
     // do something if multiplayer
+    GameLevel level = null;
     this.params = params;
     if(params.isMultiplayer){
       params.session.getSessionSocket().getMessages(3).subscribe((INetData data) -> {
         NetMessage message = (NetMessage) data;
         System.out.printf("Message @%f: %f\n", acc, message.getBuffer().getFloat());
       });
+      NetworkManager manager = engine.getWorld().getSystem(NetworkManager.class);
+      
+
+
+      MpTestMap testMap = new MpTestMap(engine.getWorld(), engine.getBox2dWorld()); 
+      level = testMap;
+      manager.setSocket(params.session.getSessionSocket(), testMap);
+      level.setup();
+      testMap.createSnake();
+
+
+    } else {
+      level = new TestMap(engine.getWorld(), engine.getBox2dWorld());
+      level.setup();
     }
+
+
   }
 
   public EcsEngine getEngine(){
     return engine;
+  }
+
+  public List<NetworkComponent> getNetworkComponents(){
+    ArrayList<NetworkComponent> networkComponents = new ArrayList<>();
+    IntBag entities = engine.getEntities(Aspect.all(Box2dComponent.class, NetworkComponent.class));
+    for(int i = 0; i < entities.size(); i++){
+      NetworkComponent networkComponent = netMapper.get(entities.get(i));
+      networkComponents.add(networkComponent);
+    }
+    return networkComponents;
   }
 
   public List<Decal> getDecals(){

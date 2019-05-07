@@ -1,16 +1,20 @@
-package com.tdt4240.game.net;
+package com.tdt4240.game.net.message;
 
 import java.io.IOException;
+import java.util.HashMap;
+
+import com.tdt4240.game.net.INetSocket;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
+
 public class MessageSocket implements IMessageSocket, Runnable{
-  private int nextId = 1;
+  //private int nextId = 1;
   private boolean disposed = false;
   private Subject<INetData> messageSubject = PublishSubject.create();
-  
+  private HashMap<Integer, Subject<INetData>> channelSubjects = new HashMap<>();
   private INetSocket socket;
   
   public MessageSocket(INetSocket socket){
@@ -28,6 +32,12 @@ public class MessageSocket implements IMessageSocket, Runnable{
           throw new IOException("Too much data");
         }
         // construct a data object, notify listeners
+        NetMessage message = new NetMessage(new NetData(buffer));
+        int channel = message.getChannel();
+        if(channel > 0 && channelSubjects.containsKey(channel)){
+          channelSubjects.get(channel).onNext(message);
+        }
+        messageSubject.onNext(message);
 
       } catch(IOException err) {
         System.err.println(err);
@@ -39,7 +49,7 @@ public class MessageSocket implements IMessageSocket, Runnable{
 
   @Override
   public void sendMessage(INetData message) {
-    nextId++;
+    //nextId++;
     if(disposed) { throw new RuntimeException("Socket is disposed"); }
     try{
       socket.getOutputStream().write(message.getData());
@@ -53,6 +63,15 @@ public class MessageSocket implements IMessageSocket, Runnable{
   public Observable<INetData> getMessages() {
     return messageSubject;
   }
+
+  @Override
+  public Observable<INetData> getMessages(int channel) {
+    if(!channelSubjects.containsKey(channel)){
+      channelSubjects.put(channel, PublishSubject.create());
+    }
+    return channelSubjects.get(channel);
+  }
+
 
   private void dispose(){
     socket.dispose();

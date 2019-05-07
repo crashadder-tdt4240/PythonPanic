@@ -2,20 +2,24 @@ package com.tdt4240.game.desktop.net;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import com.badlogic.gdx.net.Socket;
-import com.tdt4240.game.net.NetSession;
-import com.tdt4240.game.net.NetUser;
+import com.tdt4240.game.net.session.NetSession;
+import com.tdt4240.game.net.session.NetUser;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
-public class DesktopNetSession implements NetSession{
+public abstract class DesktopNetSession implements NetSession{
   
   private UUID id;
   private NetUser localuser;
   private ArrayList<NetUser> users = new ArrayList<>();
+  private long randomNumber = new Random().nextLong();
 
+  private long accRandomNumber = randomNumber;
 
   public DesktopNetSession(UUID id, NetUser localuser){
     this.id = id;
@@ -31,30 +35,20 @@ public class DesktopNetSession implements NetSession{
     return this.users;
   }
 
-  public Observable<NetUser> onUserLeft(){
-    return null;
-  }
-
-  public Observable<NetUser> onUserJoin(){
-    return null;
-  }
-
-  public void leaveSession(){
-
-  }
-
   public NetUser getLocalUser(){
     return localuser;
   }
 
-  // get socket to user
-  public Socket getSocket(NetUser user){
-    return null;
+  public void addRandomNumber(int val){
+    accRandomNumber += val;
   }
 
-  // Socket that proxies all messages from and to all users
-  public Socket getSessionSocket(){
-    return null;
+  public long getRandomNumber(){
+    return accRandomNumber;
+  }
+
+  public long getPersonalNumber(){
+    return randomNumber;
   }
 
   public void dispose(){}

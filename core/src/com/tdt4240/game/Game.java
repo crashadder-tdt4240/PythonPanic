@@ -9,8 +9,8 @@ import com.tdt4240.game.assets.Assets;
 import com.tdt4240.game.mvc.MVCManager;
 
 import com.tdt4240.game.net.NetInst;
-import com.tdt4240.game.net.NetSessionService;
-import com.tdt4240.game.net.NetUserService;
+import com.tdt4240.game.net.session.NetSessionService;
+import com.tdt4240.game.net.session.NetUserService;
 
 
 public class Game extends ApplicationAdapter {

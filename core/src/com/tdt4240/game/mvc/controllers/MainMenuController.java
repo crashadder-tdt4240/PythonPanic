@@ -12,8 +12,8 @@ import com.tdt4240.game.mvc.models.GdxStageModel;
 import com.tdt4240.game.mvc.models.MainMenuModel;
 import com.tdt4240.game.mvc.views.GdxScreenView;
 import com.tdt4240.game.net.NetInst;
-import com.tdt4240.game.net.NetSession;
-import com.tdt4240.game.net.NetUser;
+import com.tdt4240.game.net.session.NetSession;
+import com.tdt4240.game.net.session.NetUser;
 
 public class MainMenuController extends MVCController<GdxScreenView<MainMenuModel>, MainMenuModel> {
     
@@ -62,6 +62,9 @@ public class MainMenuController extends MVCController<GdxScreenView<MainMenuMode
                     NetInst.userService.signIn().subscribe((NetUser user) -> {
                         NetInst.sessionService.clientSession(user).subscribe((NetSession session) -> {
                             System.out.println("Client session created");
+                        }, (Throwable t) -> {
+                            System.err.println("Error happened!");
+                            t.printStackTrace();
                         });
                     });
                 } 

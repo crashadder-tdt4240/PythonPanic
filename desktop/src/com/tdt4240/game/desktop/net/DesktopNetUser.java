@@ -2,7 +2,7 @@ package com.tdt4240.game.desktop.net;
 
 import java.util.UUID;
 
-import com.tdt4240.game.net.NetUser;
+import com.tdt4240.game.net.session.NetUser;
 
 public class DesktopNetUser implements NetUser{
   private UUID id;

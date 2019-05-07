@@ -5,8 +5,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.tdt4240.game.Game;
 import com.tdt4240.game.desktop.net.DesktopNetSessionService;
 import com.tdt4240.game.desktop.net.DesktopNetUserService;
-import com.tdt4240.game.net.NetSessionService;
-import com.tdt4240.game.net.NetUserService;
+import com.tdt4240.game.net.session.NetSessionService;
+import com.tdt4240.game.net.session.NetUserService;
 
 public class DesktopLauncher {
   public static void main (String[] arg) {

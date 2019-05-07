@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.tdt4240.game.ecs.EcsEngine;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
+import com.tdt4240.game.mvc.GameMVCParams;
+import com.tdt4240.game.net.message.INetData;
+import com.tdt4240.game.net.message.NetMessage;
 
 public class GameModel extends MVCModel{
   private EcsEngine engine;
@@ -17,12 +20,28 @@ public class GameModel extends MVCModel{
   private ComponentMapper<SpriteComponent> spriteMapper;
   private ComponentMapper<PlayerInputComponent> playerInputMapper;
 
+  private GameMVCParams params = new GameMVCParams();
+
+  private float acc = 0;
+  private float acc2 = 0;
   public GameModel(){
     engine = new EcsEngine();
 
     spriteMapper = engine.getMapper(SpriteComponent.class);
     playerInputMapper = engine.getMapper(PlayerInputComponent.class);
 
+  }
+
+  public GameModel(GameMVCParams params){
+    this();
+    // do something if multiplayer
+    this.params = params;
+    if(params.isMultiplayer){
+      params.session.getSessionSocket().getMessages(3).subscribe((INetData data) -> {
+        NetMessage message = (NetMessage) data;
+        System.out.printf("Message @%f: %f\n", acc, message.getBuffer().getFloat());
+      });
+    }
   }
 
   public EcsEngine getEngine(){
@@ -55,5 +74,15 @@ public class GameModel extends MVCModel{
 
   public void update(float dtime){
     engine.update(dtime);
+    acc += dtime;
+    acc2 += dtime;
+    if(params.isMultiplayer){
+      if(acc2 >= 1){
+        NetMessage message = new NetMessage(3);
+        message.getBuffer().putFloat(acc);
+        params.session.getSessionSocket().sendMessage(message);
+        acc2 = 0;
+      }
+    }
   }
 }

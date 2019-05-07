@@ -83,6 +83,10 @@ public class EcsEngine{
 
   }
 
+  public World getWorld(){
+    return world;
+  }
+
   public com.badlogic.gdx.physics.box2d.World getBox2dWorld(){
     return bWorld;
   }

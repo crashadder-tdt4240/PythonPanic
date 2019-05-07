@@ -8,6 +8,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.tdt4240.game.mvc.MVCManager;
+import com.tdt4240.game.mvc.SessionMVC;
+import com.tdt4240.game.mvc.SessionMVCParams;
 import com.tdt4240.game.mvc.models.GdxStageModel;
 import com.tdt4240.game.mvc.models.MainMenuModel;
 import com.tdt4240.game.mvc.views.GdxScreenView;
@@ -49,6 +51,9 @@ public class MainMenuController extends MVCController<GdxScreenView<MainMenuMode
                     NetInst.userService.signIn().subscribe((NetUser user) -> {
                         NetInst.sessionService.hostSession(user).subscribe((NetSession session) -> {
                             System.out.println("Host session created");
+                            SessionMVCParams params = new SessionMVCParams();
+                            params.session = session;
+                            MVCManager.getInstance().createMVC("SESSION", params);
                         });
                     });
                 } 
@@ -62,6 +67,10 @@ public class MainMenuController extends MVCController<GdxScreenView<MainMenuMode
                     NetInst.userService.signIn().subscribe((NetUser user) -> {
                         NetInst.sessionService.clientSession(user).subscribe((NetSession session) -> {
                             System.out.println("Client session created");
+                            SessionMVCParams params = new SessionMVCParams();
+                            params.session = session;
+                            MVCManager.getInstance().createMVC("SESSION", params);
+
                         }, (Throwable t) -> {
                             System.err.println("Error happened!");
                             t.printStackTrace();

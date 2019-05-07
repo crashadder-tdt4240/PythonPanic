@@ -40,16 +40,18 @@ public class DesktopNetServerSession extends DesktopNetSession{
       // exchange user info
       NetMessage message = new NetMessage(1);
       NetUser localUser = getLocalUser();
-      
+      message.putString(localUser.getUserName());
       message.getBuffer().putLong(localUser.getUserId().getMostSignificantBits());
       message.getBuffer().putLong(localUser.getUserId().getLeastSignificantBits());
       messageSocket.sendMessage(message);
       messageSocket.getMessages(1).subscribe((INetData m) -> {
         NetMessage msg = (NetMessage)m;
+        String name = msg.getString();
         ByteBuffer buffer = msg.getBuffer();
         UUID userId = new UUID(buffer.getLong(), buffer.getLong());
-        System.out.println("User joined session " + userId.toString());
-        
+        System.out.printf("User joined session %s, %s\n", name ,userId.toString());
+        NetUser user = new DesktopNetUser(userId, name);
+        addUser(user);
       });
     });
   }
@@ -78,7 +80,7 @@ public class DesktopNetServerSession extends DesktopNetSession{
 
   @Override
   public MessageSocket getSessionSocket() {
-    return null;
+    return sockets.get(0);
   }
 
   @Override

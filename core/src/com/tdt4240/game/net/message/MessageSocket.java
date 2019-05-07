@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.tdt4240.game.net.INetSocket;
 
 import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -13,7 +14,7 @@ import io.reactivex.subjects.Subject;
 public class MessageSocket implements IMessageSocket, Runnable{
   //private int nextId = 1;
   private boolean disposed = false;
-  private Subject<INetData> messageSubject = PublishSubject.create();
+  private Subject<INetData> messageSubject = BehaviorSubject.create();
   private HashMap<Integer, Subject<INetData>> channelSubjects = new HashMap<>();
   private INetSocket socket;
   
@@ -28,12 +29,14 @@ public class MessageSocket implements IMessageSocket, Runnable{
       try{
         byte[] buffer = new byte[2048];
         int size = socket.getInputStream().read(buffer);
+        System.out.printf("Got message, read %d bytes\n", size);
         if(size == -1){
           throw new IOException("Too much data");
         }
         // construct a data object, notify listeners
         NetMessage message = new NetMessage(new NetData(buffer));
         int channel = message.getChannel();
+        System.out.printf("Message on channel %d\n", channel);
         if(channel > 0 && channelSubjects.containsKey(channel)){
           channelSubjects.get(channel).onNext(message);
         }
@@ -52,7 +55,9 @@ public class MessageSocket implements IMessageSocket, Runnable{
     //nextId++;
     if(disposed) { throw new RuntimeException("Socket is disposed"); }
     try{
-      socket.getOutputStream().write(message.getData());
+      byte[] data = message.getData();
+      System.out.printf("Sending message of %d bytes\n", data.length);
+      socket.getOutputStream().write(data);
     } catch (IOException e) {
       System.err.println(e);
       dispose();
@@ -67,7 +72,7 @@ public class MessageSocket implements IMessageSocket, Runnable{
   @Override
   public Observable<INetData> getMessages(int channel) {
     if(!channelSubjects.containsKey(channel)){
-      channelSubjects.put(channel, PublishSubject.create());
+      channelSubjects.put(channel, BehaviorSubject.create());
     }
     return channelSubjects.get(channel);
   }

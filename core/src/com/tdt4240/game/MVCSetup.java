@@ -5,6 +5,7 @@ import com.tdt4240.game.mvc.GameMVC;
 import com.tdt4240.game.mvc.LoadingMVC;
 import com.tdt4240.game.mvc.MVCManager;
 import com.tdt4240.game.mvc.MainMenuMVC;
+import com.tdt4240.game.mvc.SessionMVC;
 
 public class MVCSetup{
 
@@ -16,6 +17,7 @@ public class MVCSetup{
     manager.registerMVC("LOADING", new LoadingMVC());
     manager.registerMVC("MAIN_MENU", new MainMenuMVC());
     manager.registerMVC("GAME", new GameMVC());
+    manager.registerMVC("SESSION", new SessionMVC());
 
 
     manager.createMVC("LOADING");

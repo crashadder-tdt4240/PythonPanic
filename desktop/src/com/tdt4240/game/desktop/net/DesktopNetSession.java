@@ -31,6 +31,9 @@ public abstract class DesktopNetSession implements NetSession{
     return this.id;
   }
 
+  protected void addUser(NetUser user){
+    this.users.add(user);
+  }
   public List<NetUser> getConnectedUsers(){
     return this.users;
   }

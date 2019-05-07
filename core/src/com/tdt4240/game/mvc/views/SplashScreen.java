@@ -1,4 +1,4 @@
-package com.tdt4240.game.views;
+package com.tdt4240.game.mvc.views;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

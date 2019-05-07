@@ -1,6 +1,5 @@
 package com.tdt4240.game.assets;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,13 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
 import com.tdt4240.game.assets.loaders.YamlLoader;
 
 
@@ -39,8 +37,9 @@ public class Assets {
   private static Assets assets = new Assets();
 
   public Assets(){
-    assetManager = new AssetManager();
+    assetManager = new AssetManager(new LocalFileHandleResolver());
     this.fileResolver = assetManager.getFileHandleResolver();
+
   }
 
   public static Assets getInstance(){
@@ -101,7 +100,7 @@ public class Assets {
         if (!assetFile.equals(indexHandle)) {
           // assign name to asset after loading
           awaitList.add(getAsync(new AssetDescriptor<T>(assetFile, assetClass)).map((T asset) -> {
-            String assetName = String.format(index.resolvePrefix(assetFile.nameWithoutExtension()));
+            String assetName = String.format(index.resolvePrefix(assetFile.name()));
             System.out.printf("Asset loaded %s\n", assetName);
             assetMap.put(assetName, asset);
             return asset;
@@ -152,20 +151,25 @@ public class Assets {
     return (T)assetMap.get(assetname);
   }
 
+  public <T> void updateAsset(String assetname, T asset){
+    assetMap.put(assetname, asset);
+  }
+
   
   public Observable<Integer> getProgress(){
     return progressSubject;
   }
 
+  public int getCurrentProgress(){
+    return (int)(assetManager.getProgress() * 100);
+  }
+
   public void loadUpdate(){
     if(!assetManager.update()){
-      float progress = assetManager.getProgress();
-      progressSubject.onNext((int) (progress*100));
+      progressSubject.onNext(getCurrentProgress());
     }
 
     if(assetsBeingLoaded.size() > 0){
-      float progress = assetManager.getProgress();
-      progressSubject.onNext((int) (progress*100));
       ArrayList<String> keysToRemove = new ArrayList<String>(assetsBeingLoaded.size());
       for(Entry<String, AsyncSubject<?>> kp : assetsBeingLoaded.entrySet()){
         String key = kp.getKey();
@@ -176,7 +180,10 @@ public class Assets {
           keysToRemove.add(key);
         }
       }
-
+      
+      if(keysToRemove.size() >= assetsBeingLoaded.size()){
+        progressSubject.onNext(100);
+      }
       for(String key : keysToRemove){
         assetsBeingLoaded.remove(key);
       }

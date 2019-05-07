@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import com.badlogic.gdx.assets.loaders.AssetLoader;
 
-public class AssetsPresets{
+public class AssetsPresets {
   public HashMap<String, String> aliases;
   public HashMap<String, List<String>> assetLoaders;
   public List<String> assets;
@@ -33,6 +33,7 @@ public class AssetsPresets{
 
     return classes.get(alias);
   }
+
   // return all classloaders the asset classes they load
   public HashMap<Class<AssetLoader<?, ?>>, ArrayList<Class<?>>> getAssetLoaders(){
     loaders = new HashMap<Class<AssetLoader<?, ?>>, ArrayList<Class<?>>>();

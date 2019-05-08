@@ -53,7 +53,6 @@ public class GameModel extends MVCModel{
     if(params.isMultiplayer){
       params.session.getSessionSocket().getMessages(3).subscribe((INetData data) -> {
         NetMessage message = (NetMessage) data;
-        System.out.printf("Message @%f: %f\n", acc, message.getBuffer().getFloat());
       });
       NetworkManager manager = engine.getWorld().getSystem(NetworkManager.class);
       
@@ -70,7 +69,6 @@ public class GameModel extends MVCModel{
       level = new TestMap(engine.getWorld(), engine.getBox2dWorld());
       level.setup();
     }
-
 
   }
 
@@ -114,15 +112,5 @@ public class GameModel extends MVCModel{
 
   public void update(float dtime){
     engine.update(dtime);
-    acc += dtime;
-    acc2 += dtime;
-    if(params.isMultiplayer){
-      if(acc2 >= 1){
-        NetMessage message = new NetMessage(3);
-        message.getBuffer().putFloat(acc);
-        params.session.getSessionSocket().sendMessage(message);
-        acc2 = 0;
-      }
-    }
   }
 }

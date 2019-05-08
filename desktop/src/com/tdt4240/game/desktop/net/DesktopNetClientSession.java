@@ -20,12 +20,10 @@ public class DesktopNetClientSession extends DesktopNetSession{
   
   public DesktopNetClientSession(UUID id, NetUser local){
     super(id, local);
-    System.out.println("New desktop client session");
     
   }
 
   public Single<MessageSocket> connectToHost(){
-    System.out.println("Connecting");
     INetSocket socket = new NetSocket();
     socket.bind("localhost", 8888);
     
@@ -34,8 +32,6 @@ public class DesktopNetClientSession extends DesktopNetSession{
 
     socket.connect().subscribe(() -> {
       this.socket = new MessageSocket(socket);
-      System.out.println("Connected");
-      System.out.println(this.socket);
       // exchange user info
       NetMessage message = new NetMessage(1);
       NetUser localUser = getLocalUser();

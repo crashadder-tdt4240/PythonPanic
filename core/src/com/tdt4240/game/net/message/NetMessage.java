@@ -1,6 +1,5 @@
 package com.tdt4240.game.net.message;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 public class NetMessage implements INetData{
@@ -17,7 +16,7 @@ public class NetMessage implements INetData{
 
   public NetMessage(int channel){
     this.channel = channel;
-    buffer = ByteBuffer.allocate(2048);
+    buffer = ByteBuffer.allocate(128);
     buffer.putInt(channel);
   }
 

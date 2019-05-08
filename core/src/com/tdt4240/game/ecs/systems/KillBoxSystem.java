@@ -15,12 +15,13 @@ public class KillBoxSystem extends IteratingSystem{
   }
   
   public void process(int entity){
-    Box2dComponent bComponent = bComponentMapper.get(entity);
+    // needs better checking, and has to be mp safe
+    /*Box2dComponent bComponent = bComponentMapper.get(entity);
     if(bComponent.contact && bComponent.contactWith >= 0){
       int other = bComponent.contactWith;
       getWorld().delete(other);
       //bComponent.contact = false;
       //bComponent.contactWith = -1;
-    }
+    }*/
   }
 }

@@ -28,7 +28,7 @@ public class DrawSystem extends IteratingSystem{
   public void process(int entity){
     TransformComponent transformComponent = tComponentMapper.get(entity);
     DrawComponent drawComponent = dComponentMapper.get(entity);
-    if(drawComponent.drawTo > 0){
+   if(drawComponent.drawTo >= 0){
       Vector3 pos = transformComponent.transform.getTranslation(new Vector3());
       //Pixmap surface = this.surface;
       

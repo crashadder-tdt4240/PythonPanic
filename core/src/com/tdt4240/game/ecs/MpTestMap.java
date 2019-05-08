@@ -58,8 +58,8 @@ public class MpTestMap extends GameLevel{
     TransformComponent transformComponent3 = transformMapper.create(surfaceEntity);
     SpriteComponent spriteComponent3 = spriteMapper.create(surfaceEntity);
 
-    pixmapMapper.create(surfaceEntity);
-
+    PixmapComponent pixmapComponent = pixmapMapper.create(surfaceEntity);
+    pixmapComponent.pixmap = surface;
     transformComponent3.transform.translate(0, 0, -100);
    // transformComponent3.transform.rotate(0, 1, 0, 60f);
 
@@ -71,8 +71,8 @@ public class MpTestMap extends GameLevel{
 
 
   public void createSnake(){
-    float x = (random.nextFloat() - 0.5f) * 20;
-    float y = (random.nextFloat() - 0.5f) * 20;
+    float x = (random.nextFloat() - 0.5f) * 40;
+    float y = (random.nextFloat() - 0.5f) * 40;
     int entity = factory.createEntity(getBox2dWorld(), new Vector3(x, y, -50), snakeRegion, Color.GREEN);
 
     ComponentMapper<DrawComponent> drawMapper = getWorld().getMapper(DrawComponent.class);
@@ -84,7 +84,7 @@ public class MpTestMap extends GameLevel{
     NetworkComponent netComponent = netMapper.create(entity);
     netComponent.localId = entity;
     netComponent.remote = false;
-    netComponent.syncFreq = 16;
+    netComponent.syncFreq = 6;//64/12;
 
     drawMapper.get(entity).drawTo = drawSurface;
   }

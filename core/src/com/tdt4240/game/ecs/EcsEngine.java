@@ -44,7 +44,7 @@ import com.tdt4240.game.utils.Box2DUtils;
 
 public class EcsEngine{
   private World world;
-  private int tps = 120;
+  private int tps = 64;
   private int tickCounter = 0;
   private float acc = 0;
 

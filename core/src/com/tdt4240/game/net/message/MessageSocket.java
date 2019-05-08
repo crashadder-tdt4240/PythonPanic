@@ -30,14 +30,12 @@ public class MessageSocket implements IMessageSocket, Runnable{
       try{
         byte[] buffer = new byte[2048];
         int size = socket.getInputStream().read(buffer);
-        System.out.printf("Got message, read %d bytes\n", size);
         if(size == -1){
-          throw new IOException("Too much data");
+          throw new IOException("End of stream");
         }
         // construct a data object, notify listeners
         NetMessage message = new NetMessage(new NetData(buffer));
         int channel = message.getChannel();
-        System.out.printf("Message on channel %d\n", channel);
         if(channel > 0){
           if(!channelSubjects.containsKey(channel)){
             channelSubjects.put(channel, ReplaySubject.create(4));
@@ -56,7 +54,7 @@ public class MessageSocket implements IMessageSocket, Runnable{
 
   @Override
   public void sendMessage(INetData message) {
-    //nextId++;
+    if(!socket.isConnected()){return;}
     if(disposed) { throw new RuntimeException("Socket is disposed"); }
     try{
       byte[] data = message.getData();

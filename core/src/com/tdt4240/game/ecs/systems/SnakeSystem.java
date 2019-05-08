@@ -24,7 +24,7 @@ public class SnakeSystem extends IteratingSystem{
     Body body = box2dComponent.body;
     float angle = body.getAngle();
     Vector2 newVeloc = new Vector2((float)Math.cos(angle), (float) Math.sin(angle));
-    newVeloc.scl(50f);
+    newVeloc.scl(200f);
 
     body.setLinearVelocity(newVeloc);
 

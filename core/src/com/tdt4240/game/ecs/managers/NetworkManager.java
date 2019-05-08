@@ -7,6 +7,7 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.tdt4240.game.ecs.MpTestMap;
 import com.tdt4240.game.ecs.components.Box2dComponent;
@@ -67,9 +68,7 @@ public class NetworkManager extends IteratingSystem{
     int remoteId = buffer.getInt();
     int entity = entityMap.get(remoteId);
     Box2dComponent box2dComponent = box2ComponentMapper.get(entity);
-    TransformComponent transformComponent = tComponentMapper.get(entity);
     NetHelper.readBox2dComponent(buffer, box2dComponent);
-    NetHelper.readTransformComponent(buffer, transformComponent);
   }
 
   private void sendCreateMessage(int entityId){
@@ -87,7 +86,6 @@ public class NetworkManager extends IteratingSystem{
     ByteBuffer buffer = message.getBuffer();
     buffer.putInt(entityId);
     NetHelper.writeBox2dComponent(buffer, box2ComponentMapper.get(entityId));
-    NetHelper.writeTransformComponent(buffer, tComponentMapper.get(entityId));
     socket.sendMessage(message);
   }
 

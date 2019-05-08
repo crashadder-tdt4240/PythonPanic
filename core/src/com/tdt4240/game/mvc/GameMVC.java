@@ -13,7 +13,9 @@ public class GameMVC extends MVC<GameModel, GameView, GameController, GameMVCPar
   }
 
   public void create(){
-    setModel(new GameModel());
+    GameMVCParams params = new GameMVCParams();
+    params.isMultiplayer = false;
+    setModel(new GameModel(params));
     setView(new GameView(getModel()));
     setController(new GameController(getView(), getModel()));
   }

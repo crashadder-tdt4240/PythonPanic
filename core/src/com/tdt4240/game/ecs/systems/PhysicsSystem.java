@@ -24,6 +24,34 @@ public class PhysicsSystem extends IteratingSystem{
     Box2dComponent box2dComponent = box2dMapper.get(entity);
     Vector2 position = box2dComponent.body.getPosition();
     Vector3 transformPosition = transformComponent.transform.getTranslation(new Vector3());
+    
+    // modify interpolation vector
+    if(box2dComponent.interpolate) {
+    }
+    
+    final float alpha = 0.2f;
+    final float invAlpha = 1.0f - alpha;
+    
+    if(box2dComponent.interpolate && box2dComponent.ticksToInterpolate > 0){
+      Vector2 diff = position.cpy().sub(transformPosition.x, transformPosition.y);
+      box2dComponent.intVector.add(diff.scl(0.5f));
+        
+      Vector2 interpolatedVector = position.cpy().lerp(box2dComponent.intVector, alpha);
+      float interpolatedAng = ( box2dComponent.body.getAngle() * invAlpha) + (box2dComponent.intAngle * alpha); 
+      float interpolateOmega = (box2dComponent.body.getAngularVelocity() * invAlpha) + (box2dComponent.intOmega *alpha);
+      
+      box2dComponent.body.setTransform(interpolatedVector, interpolatedAng);
+      box2dComponent.body.setAngularVelocity(interpolateOmega);
+      box2dComponent.ticksToInterpolate -= 1;
+
+    } else if(box2dComponent.interpolate) {
+      System.out.println("Interpolate done");
+      box2dComponent.body.setTransform(box2dComponent.intVector, box2dComponent.intAngle);
+      box2dComponent.body.setAngularVelocity(box2dComponent.intOmega);
+      box2dComponent.ticksToInterpolate = 0;
+      box2dComponent.interpolate = false;
+    }
+
     //todo: handle this better 
     float rotation = box2dComponent.body.getAngle();
     transformPosition.x = position.x;

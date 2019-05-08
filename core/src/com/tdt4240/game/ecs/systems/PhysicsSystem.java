@@ -9,17 +9,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.tdt4240.game.ecs.components.TransformComponent;
 import com.tdt4240.game.ecs.components.Box2dComponent;
+import com.tdt4240.game.ecs.components.PowerupModifiersComponent;
 
 public class PhysicsSystem extends IteratingSystem{
   
   private ComponentMapper<TransformComponent> transformMapper;
   private ComponentMapper<Box2dComponent> box2dMapper;
 
+
   public PhysicsSystem(){
     super(Aspect.all(TransformComponent.class, Box2dComponent.class));
   }
 
   public void process(int entity){
+
+
     TransformComponent transformComponent = transformMapper.get(entity);
     Box2dComponent box2dComponent = box2dMapper.get(entity);
     Vector2 position = box2dComponent.body.getPosition();
@@ -33,7 +37,7 @@ public class PhysicsSystem extends IteratingSystem{
     final float invAlpha = 1.0f - alpha;
     
     if(box2dComponent.interpolate && box2dComponent.ticksToInterpolate > 0){
-      Vector2 diff = position.cpy().sub(transformPosition.x, transformPosition.y);
+      Vector2 diff = position.cpy().sub(transformPosition.x/2f, transformPosition.y/2f);
       box2dComponent.intVector.add(diff.scl(0.5f));
         
       Vector2 interpolatedVector = position.cpy().lerp(box2dComponent.intVector, alpha);
@@ -54,8 +58,8 @@ public class PhysicsSystem extends IteratingSystem{
 
     //todo: handle this better 
     float rotation = box2dComponent.body.getAngle();
-    transformPosition.x = position.x;
-    transformPosition.y = position.y;
+    transformPosition.x = position.x * 2;
+    transformPosition.y = position.y * 2;
     transformComponent.transform.set(transformPosition, new Quaternion(new Vector3(0,0,1), -90 + MathUtils.radDeg * rotation));
   }
 }

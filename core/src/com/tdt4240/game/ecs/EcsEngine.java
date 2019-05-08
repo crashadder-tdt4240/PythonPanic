@@ -38,6 +38,7 @@ import com.tdt4240.game.ecs.systems.DrawSystem;
 import com.tdt4240.game.ecs.systems.KillBoxSystem;
 import com.tdt4240.game.ecs.systems.PhysicsSystem;
 import com.tdt4240.game.ecs.systems.PlayerInputSystem;
+import com.tdt4240.game.ecs.systems.PowerupSystem;
 import com.tdt4240.game.ecs.systems.SnakeSystem;
 import com.tdt4240.game.ecs.systems.SpriteSystem;
 import com.tdt4240.game.utils.Box2DUtils;
@@ -60,6 +61,7 @@ public class EcsEngine{
     SpriteSystem spriteSystem = new SpriteSystem();
     SnakeSystem snakeSystem = new SnakeSystem();
     KillBoxSystem killBoxSystem = new KillBoxSystem();
+    PowerupSystem powerupSystem = new PowerupSystem();
 
     NetworkManager networkManager = new NetworkManager();
 
@@ -72,6 +74,7 @@ public class EcsEngine{
       .with(snakeSystem)
       .with(killBoxSystem)
       .with(networkManager)
+      .with(powerupSystem)
       .build();
     
 

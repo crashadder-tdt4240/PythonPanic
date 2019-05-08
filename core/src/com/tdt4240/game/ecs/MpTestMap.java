@@ -17,9 +17,12 @@ import com.tdt4240.game.ecs.components.DrawComponent;
 import com.tdt4240.game.ecs.components.NetworkComponent;
 import com.tdt4240.game.ecs.components.PixmapComponent;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
+import com.tdt4240.game.ecs.components.PowerupModifiersComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
 import com.tdt4240.game.ecs.factory.SnakeFactory;
+import com.tdt4240.game.ecs.powerups.Powerup;
+import com.tdt4240.game.ecs.powerups.SpeedPowerup;
 
 public class MpTestMap extends GameLevel{
 
@@ -78,6 +81,7 @@ public class MpTestMap extends GameLevel{
     ComponentMapper<DrawComponent> drawMapper = getWorld().getMapper(DrawComponent.class);
     ComponentMapper<NetworkComponent> netMapper = getWorld().getMapper(NetworkComponent.class);
     ComponentMapper<PlayerInputComponent> inputMapper = getWorld().getMapper(PlayerInputComponent.class);
+    ComponentMapper<PowerupModifiersComponent> powerupModMapper = getWorld().getMapper(PowerupModifiersComponent.class);
     
     inputMapper.create(entity);
     
@@ -85,6 +89,12 @@ public class MpTestMap extends GameLevel{
     netComponent.localId = entity;
     netComponent.remote = false;
     netComponent.syncFreq = 6;//64/12;
+
+    Powerup test = new SpeedPowerup();
+    test.life = 20;
+
+    powerupModMapper.get(entity).powerups.add(test);
+
 
     drawMapper.get(entity).drawTo = drawSurface;
   }

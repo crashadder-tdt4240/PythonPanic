@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.tdt4240.game.ecs.components.Box2dComponent;
 import com.tdt4240.game.ecs.components.DrawComponent;
+import com.tdt4240.game.ecs.components.PowerupModifiersComponent;
 import com.tdt4240.game.ecs.components.SnakeComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
@@ -28,7 +29,6 @@ public class SnakeFactory extends EntityFactory{
   private ComponentMapper<Box2dComponent> bComponentMapper;
   private ComponentMapper<DrawComponent> dComponentMapper;
   private ComponentMapper<TransformComponent> tComponentMapper;
-  private ComponentMapper<SnakeComponent> snakeComponentMapper;
 
   public SnakeFactory(World world){
     super(world);
@@ -38,13 +38,13 @@ public class SnakeFactory extends EntityFactory{
       .add(SpriteComponent.class)
       .add(DrawComponent.class)
       .add(SnakeComponent.class)
+      .add(PowerupModifiersComponent.class)
       .build(world);
 
     sComponentMapper = world.getMapper(SpriteComponent.class);
     bComponentMapper = world.getMapper(Box2dComponent.class);
     dComponentMapper = world.getMapper(DrawComponent.class);
     tComponentMapper = world.getMapper(TransformComponent.class);
-    snakeComponentMapper = world.getMapper(SnakeComponent.class);
   }
   
   public int createEntity(){

@@ -5,6 +5,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -28,6 +29,7 @@ public class GameView extends MVCView<GameModel>{
   private DecalBatch decalBatch;
   private CameraGroupStrategy cameraGroupStrategy;
   private Camera gameCamera;
+
   
   private Box2DDebugRenderer debugRenderer;
   public GameView(GameModel model){
@@ -59,4 +61,11 @@ public class GameView extends MVCView<GameModel>{
     decalBatch.flush();
     debugRenderer.render(getModel().getEngine().getBox2dWorld(), gameCamera.combined);
   }
+
+ 
+
+
+
+
+
 }

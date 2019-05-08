@@ -2,30 +2,39 @@ package com.tdt4240.game.mvc.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tdt4240.game.assets.Assets;
 
 public class MainMenuModel extends GdxStageModel{
   private Stage stage;
-  private TextButton startButton, exitButton, settingsButton;
+  private TextButton startButton, exitButton, settingsButton,imageButton;
   private TextButton.TextButtonStyle style;
   private TextureAtlas atlas;
   private BitmapFont font;
   private Table table;
   private Skin skin;
 
+
   public MainMenuModel(){
     Assets assets = Assets.getInstance();
+
         
     skin = assets.getAsset("skin.uiskin.json");
+    Texture splashTexture = assets.getAsset("texture.python-panic.png");
+    Drawable splash = new TextureRegionDrawable(new TextureRegion(splashTexture));
+
 
     table = new Table();
-
+    table.setBackground(splash);
     
     stage = new Stage();
     startButton = new TextButton("START",skin);
@@ -38,6 +47,7 @@ public class MainMenuModel extends GdxStageModel{
 
     TextButton hostButton = new TextButton("HOST", skin);
     TextButton joinButton = new TextButton("JOIN", skin);
+
 
     table.setFillParent(true);
     table.setDebug(false); //debugger

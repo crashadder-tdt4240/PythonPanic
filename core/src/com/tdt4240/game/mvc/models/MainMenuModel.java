@@ -1,6 +1,7 @@
 package com.tdt4240.game.mvc.models;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tdt4240.game.assets.Assets;
+import com.tdt4240.game.mvc.MusicManager;
 
 public class MainMenuModel extends GdxStageModel{
   private Stage stage;
@@ -22,19 +24,30 @@ public class MainMenuModel extends GdxStageModel{
   private BitmapFont font;
   private Table table;
   private Skin skin;
+  private Music music;
 
 
   public MainMenuModel(){
     Assets assets = Assets.getInstance();
-
-        
-    skin = assets.getAsset("skin.uiskin.json");
     Texture splashTexture = assets.getAsset("texture.python-panic.png");
     Drawable splash = new TextureRegionDrawable(new TextureRegion(splashTexture));
+    MusicManager music = MusicManager.getInstance();
+        
+    skin = assets.getAsset("skin.uiskin.json");
+    music.playMusic();
 
 
     table = new Table();
     table.setBackground(splash);
+
+    /*
+    music = Assets.getInstance().getAsset("music.backgroundMusic.mp3");
+    music.setLooping(true);
+    music.setVolume(0.5f);
+    music.play();
+    */
+
+
     
     stage = new Stage();
     startButton = new TextButton("START",skin);
@@ -71,9 +84,11 @@ public class MainMenuModel extends GdxStageModel{
     bindActor("HOST", hostButton);
     bindActor("JOIN", joinButton);
     bindActor("EXIT", exitButton);
+    bindActor("SETTINGS", settingsButton);
 
 
   }
+
   
   public void update(float dtime){
     stage.act(dtime);

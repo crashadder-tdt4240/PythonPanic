@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tdt4240.game.assets.Assets;
 import com.tdt4240.game.mvc.models.GdxStageModel;
 import com.tdt4240.game.mvc.models.MainMenuModel;
+import com.tdt4240.game.mvc.models.SettingsMenuModel;
 
 
 public class GdxScreenView<M extends GdxStageModel> extends MVCView<M> {

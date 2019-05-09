@@ -49,6 +49,7 @@ assets:
   - './atlases'
   - './fonts'
   - './skins'
+  - "./music"
 
 # game settings
 #settingsFile: './default-settings.yml'

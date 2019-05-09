@@ -6,20 +6,24 @@ import java.util.List;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
+import com.tdt4240.game.assets.Assets;
 import com.tdt4240.game.ecs.EcsEngine;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 
 public class GameModel extends MVCModel{
   private EcsEngine engine;
+  
 
   private ComponentMapper<SpriteComponent> spriteMapper;
   private ComponentMapper<PlayerInputComponent> playerInputMapper;
 
   public GameModel(){
+    
     engine = new EcsEngine();
-
     spriteMapper = engine.getMapper(SpriteComponent.class);
     playerInputMapper = engine.getMapper(PlayerInputComponent.class);
 
@@ -56,4 +60,8 @@ public class GameModel extends MVCModel{
   public void update(float dtime){
     engine.update(dtime);
   }
+
+
+
+
 }

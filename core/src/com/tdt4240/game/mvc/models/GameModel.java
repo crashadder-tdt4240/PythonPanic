@@ -16,17 +16,12 @@ import com.tdt4240.game.ecs.components.SpriteComponent;
 
 public class GameModel extends MVCModel{
   private EcsEngine engine;
-  private Music music;
   
 
   private ComponentMapper<SpriteComponent> spriteMapper;
   private ComponentMapper<PlayerInputComponent> playerInputMapper;
 
   public GameModel(){
-    music = Assets.getInstance().getAsset("music.backgroundMusic.mp3");
-    music.setLooping(true);
-    music.setVolume(0.5f);
-    music.play();
     
     engine = new EcsEngine();
     spriteMapper = engine.getMapper(SpriteComponent.class);

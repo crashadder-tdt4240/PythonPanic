@@ -66,6 +66,15 @@ public class SettingsMenuModel extends GdxStageModel {
         table.setHeight(Gdx.graphics.getHeight());
         table.setWidth(Gdx.graphics.getWidth());
         stage.addActor(table);
+
+
+        bindActor("ENABLE SOUND", soundButton);
+        bindActor("ENABLE MUSIC", musicButton);
+        bindActor("EXIT GAME", exitButton);
+        bindActor("BACK", backButton);
+
+
+
     }
 
 

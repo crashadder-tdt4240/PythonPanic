@@ -38,19 +38,20 @@ public class SettingsMenuModel extends GdxStageModel {
         
         table = new Table();
 
-        //actor = new Actor();
         
         stage = new Stage();
         TextButton soundButton = new TextButton("ENABLE SOUND",skin);
         TextButton musicButton = new TextButton("ENABLE MUSIC",skin);
         TextButton exitButton = new TextButton("EXIT GAME", skin);
         TextButton backButton = new TextButton("BACK", skin);
+        Slider musicSlider = new Slider(0.1f,1, 0.1f, false, skin);
 
 
         soundButton.setColor(Color.YELLOW);
         musicButton.setColor(Color.YELLOW);
         exitButton.setColor(Color.YELLOW);
         backButton.setColor(Color.YELLOW);
+        musicSlider.setColor(Color.YELLOW);
 
         table.setFillParent(true);
         table.setDebug(false); //debugger
@@ -62,6 +63,7 @@ public class SettingsMenuModel extends GdxStageModel {
         table.add(exitButton);
         table.row();
         table.add(backButton);
+    
 
         table.setHeight(Gdx.graphics.getHeight());
         table.setWidth(Gdx.graphics.getWidth());

@@ -53,7 +53,22 @@ public class SettingsMenuController extends MVCController<GdxScreenView<Settings
                 } 
             }
         });
+
+
+
+        model.onEvent("EXIT GAME").subscribe((Event event) -> {
+            if(event instanceof InputEvent){
+                InputEvent ievent = (InputEvent)event;
+                if(ievent.getType() == InputEvent.Type.touchUp){
+                    Gdx.app.exit();
+                } 
+            }
+        });
+
     }
+
+
+    
 
 
     public InputProcessor getInputManager(){

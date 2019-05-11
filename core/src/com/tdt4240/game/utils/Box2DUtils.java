@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Box2DUtils{
 
+  public static World world;
 
   public class Category{
     public static final short PLAYER = 1;

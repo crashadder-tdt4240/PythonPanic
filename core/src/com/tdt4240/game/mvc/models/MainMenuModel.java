@@ -3,12 +3,16 @@ package com.tdt4240.game.mvc.models;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tdt4240.game.assets.Assets;
 import com.tdt4240.game.mvc.MusicManager;
 
@@ -21,14 +25,20 @@ public class MainMenuModel extends GdxStageModel{
   private Skin skin;
   private Music music;
 
+
   public MainMenuModel(){
     Assets assets = Assets.getInstance();
+    Texture splashTexture = assets.getAsset("texture.python-panic.png");
+    Drawable splash = new TextureRegionDrawable(new TextureRegion(splashTexture));
     MusicManager music = MusicManager.getInstance();
         
     skin = assets.getAsset("skin.uiskin.json");
     music.playMusic();
 
+
     table = new Table();
+    table.setBackground(splash);
+
 
 
 
@@ -47,6 +57,7 @@ public class MainMenuModel extends GdxStageModel{
     exitButton.setColor(Color.YELLOW);
     settingsButton.setColor(Color.YELLOW);
     helpButton.setColor(Color.YELLOW);
+
 
     table.setFillParent(true);
     table.setDebug(false); //debugger

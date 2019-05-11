@@ -2,6 +2,7 @@ package com.tdt4240.game.mvc.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
@@ -37,6 +38,8 @@ public class GameModel extends MVCModel{
 
   private GameMVCParams params = new GameMVCParams();
 
+  private Random random = new Random();
+
   public GameModel(){
     engine = new EcsEngine();
     
@@ -57,11 +60,11 @@ public class GameModel extends MVCModel{
     if(params.isMultiplayer){
       IMessageSocket socket = params.session.getSessionSocket();
       
-      // listne to game events, keeps track of when a player has died
+      // listen to game events, keeps track of when a player has died
       socket.getMessages(100).subscribe((INetData data) -> 
         onUserLost((NetMessage)data)
       );
-      
+      random.setSeed(params.session.getSeed());
       NetworkManager manager = engine.getWorld().getSystem(NetworkManager.class);
       
 

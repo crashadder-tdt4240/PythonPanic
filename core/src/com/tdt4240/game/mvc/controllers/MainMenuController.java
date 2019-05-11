@@ -44,23 +44,7 @@ public class MainMenuController extends MVCController<GdxScreenView<MainMenuMode
             }
         });
 
-        model.onEvent("HOST").subscribe((Event event) -> {
-            if(event instanceof InputEvent){
-                InputEvent ievent = (InputEvent)event;
-                if(ievent.getType() == InputEvent.Type.touchUp){
-                    NetInst.userService.signIn().subscribe((NetUser user) -> {
-                        NetInst.sessionService.hostSession(user).subscribe((NetSession session) -> {
-                            System.out.println("Host session created");
-                            SessionMVCParams params = new SessionMVCParams();
-                            params.session = session;
-                            MVCManager.getInstance().createMVC("SESSION", params);
-                        });
-                    });
-                } 
-            }
-        });
-
-        model.onEvent("JOIN").subscribe((Event event) -> {
+        model.onEvent("FIND").subscribe((Event event) -> {
             if(event instanceof InputEvent){
                 InputEvent ievent = (InputEvent)event;
                 if(ievent.getType() == InputEvent.Type.touchUp){

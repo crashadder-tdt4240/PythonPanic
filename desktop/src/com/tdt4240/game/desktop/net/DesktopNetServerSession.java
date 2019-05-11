@@ -2,11 +2,13 @@ package com.tdt4240.game.desktop.net;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
 import com.tdt4240.game.net.INetServerSocket;
 import com.tdt4240.game.net.INetSocket;
+import com.tdt4240.game.net.NetRelay;
 import com.tdt4240.game.net.NetServerSocket;
 import com.tdt4240.game.net.message.INetData;
 import com.tdt4240.game.net.message.MessageSocket;
@@ -27,6 +29,11 @@ public class DesktopNetServerSession extends DesktopNetSession{
 
   public DesktopNetServerSession(UUID id, NetUser local){
     super(id, local);
+  }
+
+  public void createSession(List<INetSocket> sockets){
+    // todo: relay messages
+    NetRelay relay = new NetRelay(sockets);
   }
 
 

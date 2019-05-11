@@ -37,7 +37,7 @@ public class NetServerSocket implements INetServerSocket{
     active = true;
     Thread t = new Thread(){
       public void run(){
-        while(connectionsToAccept > 0 || connectionsToAccept == -1){
+        while(connectionsToAccept > 0 || connectionsToAccept <= -1){
           connectionSubject.onNext(new NetSocket(socket.accept(hints)));
           connectionsToAccept--;
         }

@@ -58,7 +58,6 @@ public class MessageSocket implements IMessageSocket, Runnable{
     if(disposed) { throw new RuntimeException("Socket is disposed"); }
     try{
       byte[] data = message.getData();
-      System.out.printf("Sending message of %d bytes\n", data.length);
       socket.getOutputStream().write(data);
     } catch (IOException e) {
       System.err.println(e);

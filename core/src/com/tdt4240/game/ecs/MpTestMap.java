@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.tdt4240.game.assets.Assets;
 import com.tdt4240.game.ecs.components.DrawComponent;
@@ -30,24 +31,26 @@ public class MpTestMap extends GameLevel{
   private Random random = new Random();
   private TextureRegion snakeRegion;
   private int drawSurface = -1;
+  private Vector2 worldSize;
 
-  public MpTestMap(World world, com.badlogic.gdx.physics.box2d.World box2d){
+  public MpTestMap(World world, com.badlogic.gdx.physics.box2d.World box2d, Vector2 worldSize){
     super(world, box2d);
     factory = new SnakeFactory(world);
     Assets assets = Assets.getInstance();
     Texture tex = assets.getAsset("texture.test.png");
     snakeRegion = new TextureRegion(tex);
+    this.worldSize = worldSize;
   }
 
   @Override
   public void setup() {
     
-    Pixmap surface = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Format.RGB888);
+    Pixmap surface = new Pixmap((int)worldSize.x, (int)worldSize.y, Format.RGB888);
     Texture surfaceTexture = new Texture(surface);
 
     Decal surfaceSprite = Decal.newDecal(
-      Gdx.graphics.getWidth(), 
-      Gdx.graphics.getHeight(), 
+      surface.getWidth(), 
+      surface.getHeight(),
       new TextureRegion(surfaceTexture)
     );
 

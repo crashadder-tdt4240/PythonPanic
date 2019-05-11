@@ -8,6 +8,7 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
+import com.badlogic.gdx.math.Vector2;
 import com.tdt4240.game.ecs.EcsEngine;
 import com.tdt4240.game.ecs.GameLevel;
 import com.tdt4240.game.ecs.MpTestMap;
@@ -40,6 +41,9 @@ public class GameModel extends MVCModel{
 
   private Random random = new Random();
 
+
+  private Vector2 worldSize = new Vector2(1000, 1000);
+
   public GameModel(){
     engine = new EcsEngine();
     
@@ -69,7 +73,7 @@ public class GameModel extends MVCModel{
       
 
 
-      MpTestMap testMap = new MpTestMap(engine.getWorld(), engine.getBox2dWorld()); 
+      MpTestMap testMap = new MpTestMap(engine.getWorld(), engine.getBox2dWorld(), getWorldSize()); 
       level = testMap;
       manager.setSocket(params.session.getSessionSocket(), testMap);
       level.setup();
@@ -77,10 +81,14 @@ public class GameModel extends MVCModel{
 
 
     } else {
-      level = new TestMap(engine.getWorld(), engine.getBox2dWorld());
+      level = new TestMap(engine.getWorld(), engine.getBox2dWorld(), getWorldSize());
       level.setup();
     }
 
+  }
+
+  public Vector2 getWorldSize(){
+    return worldSize.cpy();
   }
 
   private void onUserLost(NetMessage message){

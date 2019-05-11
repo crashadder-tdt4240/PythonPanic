@@ -27,9 +27,10 @@ import com.tdt4240.game.ecs.factory.SnakeFactory;
 import com.tdt4240.game.utils.Box2DUtils;
 
 public class TestMap extends GameLevel{
-
-  public TestMap(World w, com.badlogic.gdx.physics.box2d.World box2d){
+  private Vector2 worldSize;
+  public TestMap(World w, com.badlogic.gdx.physics.box2d.World box2d, Vector2 worldSize){
     super(w, box2d);
+    this.worldSize = worldSize;
   }
   
 
@@ -40,7 +41,7 @@ public class TestMap extends GameLevel{
 
     SnakeFactory snakeFactory = new SnakeFactory(world);
 
-    Pixmap surface = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Format.RGB888);
+    Pixmap surface = new Pixmap((int)worldSize.x, (int)worldSize.y, Format.RGB888);
     Texture surfaceTexture = new Texture(surface);
 
     Texture testTexture = Assets.getInstance().getAsset("texture.test.png");//new Texture(Gdx.files.internal("textures/test.png"));
@@ -50,8 +51,8 @@ public class TestMap extends GameLevel{
 
     // Create sprite for the snakes
     Decal surfaceSprite = Decal.newDecal(
-      Gdx.graphics.getWidth(), 
-      Gdx.graphics.getHeight(), 
+      surface.getWidth()*2,
+      surface.getHeight()*2, 
       new TextureRegion(surfaceTexture)
     );
 

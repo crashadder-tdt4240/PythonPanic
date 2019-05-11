@@ -29,14 +29,19 @@ public class DrawSystem extends IteratingSystem{
     TransformComponent transformComponent = tComponentMapper.get(entity);
     DrawComponent drawComponent = dComponentMapper.get(entity);
    if(drawComponent.drawTo >= 0){
-      Vector3 pos = transformComponent.transform.getTranslation(new Vector3());
+      Vector3 pos = transformComponent.transform.getTranslation(new Vector3()).scl(0.5f);
       //Pixmap surface = this.surface;
+      Pixmap surface = pComponentMapper.get(drawComponent.drawTo).pixmap;
       
       pos.y = -pos.y;
-      pos.y += Gdx.graphics.getHeight()/2;
-      pos.x += Gdx.graphics.getWidth()/2;
 
-      Pixmap surface = pComponentMapper.get(drawComponent.drawTo).pixmap;
+      pos.y += surface.getHeight()/2;
+      pos.x += surface.getWidth()/2;
+
+
+      
+
+      
       SpriteComponent surfaceSprite = sComponentMapper.get(drawComponent.drawTo);
 
       surface.setColor(drawComponent.color);

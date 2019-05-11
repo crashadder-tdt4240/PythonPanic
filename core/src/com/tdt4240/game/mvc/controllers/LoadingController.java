@@ -1,6 +1,5 @@
 package com.tdt4240.game.mvc.controllers;
 
-import com.badlogic.gdx.Gdx;
 import com.tdt4240.game.assets.Assets;
 import com.tdt4240.game.mvc.MVCManager;
 import com.tdt4240.game.mvc.models.LoadingModel;

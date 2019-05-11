@@ -3,7 +3,6 @@ package com.tdt4240.game.ecs.systems;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
-import com.badlogic.gdx.graphics.g3d.utils.BaseAnimationController.Transform;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.tdt4240.game.ecs.components.SpriteComponent;

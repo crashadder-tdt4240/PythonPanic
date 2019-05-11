@@ -1,6 +1,5 @@
 package com.tdt4240.game.net.message;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 public class NetMessage implements INetData{

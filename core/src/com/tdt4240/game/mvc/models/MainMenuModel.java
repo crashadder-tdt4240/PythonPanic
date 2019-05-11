@@ -1,11 +1,8 @@
 package com.tdt4240.game.mvc.models;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -18,13 +15,10 @@ import com.tdt4240.game.mvc.MusicManager;
 
 public class MainMenuModel extends GdxStageModel{
   private Stage stage;
-  private TextButton startButton, exitButton, settingsButton,imageButton;
+  private TextButton startButton, exitButton, settingsButton;
   private TextButton.TextButtonStyle style;
-  private TextureAtlas atlas;
-  private BitmapFont font;
   private Table table;
   private Skin skin;
-  private Music music;
 
 
   public MainMenuModel(){
@@ -40,14 +34,7 @@ public class MainMenuModel extends GdxStageModel{
     table = new Table();
     table.setBackground(splash);
 
-    /*
-    music = Assets.getInstance().getAsset("music.backgroundMusic.mp3");
-    music.setLooping(true);
-    music.setVolume(0.5f);
-    music.play();
-    */
-
-
+  
     
     stage = new Stage();
     startButton = new TextButton("START",skin);

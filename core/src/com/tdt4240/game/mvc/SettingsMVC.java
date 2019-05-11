@@ -1,8 +1,6 @@
 package com.tdt4240.game.mvc;
 
 import com.tdt4240.game.mvc.controllers.SettingsMenuController;
-import com.tdt4240.game.mvc.models.GdxStageModel;
-import com.tdt4240.game.mvc.models.MainMenuModel;
 import com.tdt4240.game.mvc.models.SettingsMenuModel;
 import com.tdt4240.game.mvc.views.GdxScreenView;
 

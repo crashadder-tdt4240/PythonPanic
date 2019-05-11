@@ -1,16 +1,12 @@
 package com.tdt4240.game.mvc.views;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class SplashScreen implements Screen{
-    private Game myGame;
-    private OrthographicCamera camera;
     private Texture splashTexture;
     private SpriteBatch batch;
 

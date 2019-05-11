@@ -2,7 +2,6 @@ package com.tdt4240.game.desktop.net;
 
 import java.util.UUID;
 
-import com.badlogic.gdx.net.Socket;
 import com.tdt4240.game.net.message.MessageSocket;
 import com.tdt4240.game.net.session.NetSession;
 import com.tdt4240.game.net.session.NetSessionService;

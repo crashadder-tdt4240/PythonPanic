@@ -5,9 +5,6 @@ import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.math.Vector3;
 import com.tdt4240.game.ecs.components.DrawComponent;
 import com.tdt4240.game.ecs.components.PixmapComponent;
@@ -28,7 +25,7 @@ public class DrawSystem extends IteratingSystem{
   public void process(int entity){
     TransformComponent transformComponent = tComponentMapper.get(entity);
     DrawComponent drawComponent = dComponentMapper.get(entity);
-   if(drawComponent.drawTo >= 0){
+   if(drawComponent.drawTo >= 0 && drawComponent.draw){
       Vector3 pos = transformComponent.transform.getTranslation(new Vector3()).scl(0.5f);
       //Pixmap surface = this.surface;
       Pixmap surface = pComponentMapper.get(drawComponent.drawTo).pixmap;

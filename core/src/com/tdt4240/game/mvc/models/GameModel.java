@@ -21,12 +21,12 @@ import com.tdt4240.game.ecs.managers.NetworkManager;
 import com.tdt4240.game.mvc.GameMVCParams;
 import com.tdt4240.game.net.message.IMessageSocket;
 import com.tdt4240.game.net.message.INetData;
-import com.tdt4240.game.net.message.MessageSocket;
 import com.tdt4240.game.net.message.NetMessage;
 import com.tdt4240.game.net.session.NetUser;
 
 public class GameModel extends MVCModel{
   private EcsEngine engine;
+  
 
   private ComponentMapper<SpriteComponent> spriteMapper;
   private ComponentMapper<PlayerInputComponent> playerInputMapper;
@@ -45,9 +45,8 @@ public class GameModel extends MVCModel{
   private Vector2 worldSize = new Vector2(1000, 1000);
 
   public GameModel(){
+    
     engine = new EcsEngine();
-    
-    
     spriteMapper = engine.getMapper(SpriteComponent.class);
     playerInputMapper = engine.getMapper(PlayerInputComponent.class);
 
@@ -136,4 +135,8 @@ public class GameModel extends MVCModel{
   public void update(float dtime){
     engine.update(dtime);
   }
+
+
+
+
 }

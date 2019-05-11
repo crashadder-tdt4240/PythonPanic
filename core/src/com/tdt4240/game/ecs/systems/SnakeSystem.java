@@ -8,6 +8,7 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.tdt4240.game.ecs.components.Box2dComponent;
+import com.tdt4240.game.ecs.components.DrawComponent;
 import com.tdt4240.game.ecs.components.PowerupModifiersComponent;
 import com.tdt4240.game.ecs.components.SnakeComponent;
 import com.tdt4240.game.ecs.powerups.Powerup;
@@ -16,7 +17,10 @@ import com.tdt4240.game.ecs.powerups.SpeedPowerup;
 public class SnakeSystem extends IteratingSystem{
 
   private ComponentMapper<Box2dComponent> box2dMapper;
+  private ComponentMapper<SnakeComponent> snakeMapper;
+  private ComponentMapper<DrawComponent> drawMapper;
   private ComponentMapper<PowerupModifiersComponent> powerupModMapper;
+  
   private float baseSpeed = 100f;
   public SnakeSystem(){
     super(Aspect.all(Box2dComponent.class, SnakeComponent.class));
@@ -28,6 +32,25 @@ public class SnakeSystem extends IteratingSystem{
     // "hack" so final speed can be modified in lambda
     final float[] finalSpeed = {baseSpeed};
     
+    SnakeComponent snake = snakeMapper.get(entity);
+    if(drawMapper.has(entity) ) {
+      DrawComponent draw = drawMapper.get(entity);
+      if(draw.draw){
+        snake.holeCooldown -= getWorld().getDelta();			
+        if(snake.holeCooldown <= 0){
+          snake.tickHole = 2;
+          snake.holeCooldown = 5;
+          draw.draw = false;
+        }
+      } else {
+        snake.tickHole -= getWorld().getDelta();
+        if(snake.tickHole <= 0){
+          draw.draw = true;
+        }
+      }
+      
+    }
+  
 
     if(powerupModMapper.has(entity)){
       

@@ -13,7 +13,6 @@ import io.reactivex.subjects.Subject;
 
 
 public class MessageSocket implements IMessageSocket, Runnable{
-  //private int nextId = 1;
   private boolean disposed = false;
   private Subject<INetData> messageSubject = ReplaySubject.create(4);
   private HashMap<Integer, Subject<INetData>> channelSubjects = new HashMap<>();

@@ -49,8 +49,8 @@ public class MpTestMap extends GameLevel{
     Texture surfaceTexture = new Texture(surface);
 
     Decal surfaceSprite = Decal.newDecal(
-      surface.getWidth(), 
-      surface.getHeight(),
+      surface.getWidth()*2, 
+      surface.getHeight()*2,
       new TextureRegion(surfaceTexture)
     );
 

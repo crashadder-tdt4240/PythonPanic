@@ -10,4 +10,6 @@ public class DrawComponent extends Component{
   // What entity to draw to, this entity need to have a pixmap component
   public int drawTo = -1;
   public Color color = Color.WHITE;
+  public boolean draw = false;
+
 }

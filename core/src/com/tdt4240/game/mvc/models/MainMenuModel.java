@@ -2,41 +2,50 @@ package com.tdt4240.game.mvc.models;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tdt4240.game.assets.Assets;
+import com.tdt4240.game.mvc.MusicManager;
 
 public class MainMenuModel extends GdxStageModel{
   private Stage stage;
-  private TextButton startButton, exitButton, settingsButton;
   private TextButton.TextButtonStyle style;
-  private TextureAtlas atlas;
-  private BitmapFont font;
   private Table table;
   private Skin skin;
 
+
   public MainMenuModel(){
     Assets assets = Assets.getInstance();
+    Texture splashTexture = assets.getAsset("texture.python-panic.png");
+    Drawable splash = new TextureRegionDrawable(new TextureRegion(splashTexture));
+    MusicManager music = MusicManager.getInstance();
         
     skin = assets.getAsset("skin.uiskin.json");
+    music.playMusic();
+
 
     table = new Table();
-
+    table.setBackground(splash);
     
     stage = new Stage();
-    startButton = new TextButton("START",skin);
-
-    exitButton = new TextButton("EXIT",skin);
-    settingsButton = new TextButton("SETTINGS",skin);
+    TextButton startButton = new TextButton("START",skin);
+    TextButton findButton = new TextButton("FIND GAME", skin);
+    TextButton exitButton = new TextButton("EXIT",skin);
+    TextButton settingsButton = new TextButton("SETTINGS",skin);
+    TextButton helpButton = new TextButton("HELP", skin);
 
     startButton.setColor(Color.YELLOW);
-    settingsButton.setColor(Color.BLUE);
+    findButton.setColor(Color.YELLOW);
+    exitButton.setColor(Color.YELLOW);
+    settingsButton.setColor(Color.YELLOW);
+    helpButton.setColor(Color.YELLOW);
 
-    TextButton findButton = new TextButton("FIND GAME", skin);
 
     table.setFillParent(true);
     table.setDebug(false); //debugger
@@ -48,6 +57,8 @@ public class MainMenuModel extends GdxStageModel{
     table.add(exitButton);
     table.row();
     table.add(settingsButton);
+    table.row();
+    table.add(helpButton);
 
     table.setHeight(Gdx.graphics.getHeight());
     table.setWidth(Gdx.graphics.getWidth());
@@ -57,9 +68,11 @@ public class MainMenuModel extends GdxStageModel{
     bindActor("START", startButton);
     bindActor("FIND", findButton);
     bindActor("EXIT", exitButton);
-
+    bindActor("SETTINGS", settingsButton);
+    bindActor("HELP", helpButton);
 
   }
+
   
   public void update(float dtime){
     stage.act(dtime);

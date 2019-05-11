@@ -1,10 +1,7 @@
 package com.tdt4240.game.ecs;
 
-import java.io.PushbackInputStream;
-
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -44,8 +41,8 @@ public class TestMap extends GameLevel{
     Pixmap surface = new Pixmap((int)worldSize.x, (int)worldSize.y, Format.RGB888);
     Texture surfaceTexture = new Texture(surface);
 
-    Texture testTexture = Assets.getInstance().getAsset("texture.test.png");//new Texture(Gdx.files.internal("textures/test.png"));
 
+    Texture testTexture = Assets.getInstance().getAsset("texture.python-head-blue.png");//new Texture(Gdx.files.internal("textures/test.png"));
     //surfaceTexture.bind(1);
     //Gdx.gl.glActiveTexture(0);
 

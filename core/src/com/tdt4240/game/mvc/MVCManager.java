@@ -1,10 +1,7 @@
 package com.tdt4240.game.mvc;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.controllers.Controller;
 import com.tdt4240.game.mvc.controllers.MVCController;
 import com.tdt4240.game.mvc.models.MVCModel;
 import com.tdt4240.game.mvc.views.MVCView;

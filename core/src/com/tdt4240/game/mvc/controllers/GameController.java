@@ -1,15 +1,9 @@
 package com.tdt4240.game.mvc.controllers;
 
-import java.util.Vector;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.EntitySubscription.SubscriptionListener;
-import com.artemis.utils.IntBag;
+
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
-import com.tdt4240.game.ecs.EcsEngine;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.mvc.models.GameModel;
 import com.tdt4240.game.mvc.views.GameView;

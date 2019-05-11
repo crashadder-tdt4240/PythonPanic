@@ -15,9 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.tdt4240.game.assets.Assets;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 
-public class SettingsMenuModel extends GdxStageModel {
+public class HelpModel extends GdxStageModel {
 
 
     private Stage stage;
@@ -32,40 +33,34 @@ public class SettingsMenuModel extends GdxStageModel {
     private Skin skin;
 
 
-    public SettingsMenuModel(){
+    public HelpModel(){
         Assets assets = Assets.getInstance();
         skin = assets.getAsset("skin.uiskin.json");
         table = new Table();
         stage = new Stage();
 
-        TextButton soundButton = new TextButton("ENABLE SOUND",skin);
-        TextButton musicButton = new TextButton("ENABLE MUSIC",skin);
+
+        Label helpText = new Label("Manouver your snake and try to block the other players with your trail. Avoid walls and the trails of other players. Hit powerups to gain an advantage. Steer by pressing left or right on your device  ", skin);
         TextButton backButton = new TextButton("BACK", skin);
 
-
-        soundButton.setColor(Color.YELLOW);
-        musicButton.setColor(Color.YELLOW);
         backButton.setColor(Color.YELLOW);
 
 
+        helpText.setWrap(true);
         table.setFillParent(true);
         table.setDebug(false); //debugger
-        table.row();
-        table.add(soundButton);
-        table.row();
-        table.add(musicButton);
 
         table.row();
         table.add(backButton);
-    
+        table.row();
+        table.add(helpText).width(450f);
 
         table.setHeight(Gdx.graphics.getHeight());
         table.setWidth(Gdx.graphics.getWidth());
         stage.addActor(table);
 
 
-        bindActor("ENABLE SOUND", soundButton);
-        bindActor("ENABLE MUSIC", musicButton);
+
         bindActor("BACK", backButton);
 
 

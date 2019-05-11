@@ -20,41 +20,23 @@ import com.tdt4240.game.mvc.MVCManager;
 import com.tdt4240.game.mvc.MusicManager;
 import com.tdt4240.game.mvc.models.MVCModel;
 import com.tdt4240.game.mvc.models.MainMenuModel;
-import com.tdt4240.game.mvc.models.SettingsMenuModel;
+import com.tdt4240.game.mvc.models.HelpModel;
 import com.tdt4240.game.mvc.views.GdxScreenView;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.audio.Music;
 
 
-public class SettingsMenuController extends MVCController<GdxScreenView<SettingsMenuModel>, SettingsMenuModel> {
+public class HelpController extends MVCController<GdxScreenView<HelpModel>, HelpModel> {
     private InputMultiplexer multiplexer;
-    private MusicManager music;
 
-    public SettingsMenuController(GdxScreenView<SettingsMenuModel> view, SettingsMenuModel model){
+    public HelpController(GdxScreenView<HelpModel> view, HelpModel model){
         super(view, model); 
         multiplexer = new InputMultiplexer();
-        MusicManager music = MusicManager.getInstance();
 
-        
-        
+
+
+
         multiplexer.addProcessor(model.getStage());
-        model.onEvent("ENABLE MUSIC").subscribe((Event event) -> {
-            if(event instanceof InputEvent){
-                InputEvent ievent = (InputEvent)event;
-                if(ievent.getType() == InputEvent.Type.touchUp){
-                    if(music.musicOn()){
-                        music.pauseMusic();
-                    }  
-                    else{
-                        music.playMusic();
-                    } 
-                    
-                } 
-            }
-        });
-
-
         model.onEvent("BACK").subscribe((Event event) -> {
             if(event instanceof InputEvent){
                 InputEvent ievent = (InputEvent)event;

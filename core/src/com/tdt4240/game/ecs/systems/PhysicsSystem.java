@@ -30,15 +30,13 @@ public class PhysicsSystem extends IteratingSystem{
     Vector3 transformPosition = transformComponent.transform.getTranslation(new Vector3());
     
     // modify interpolation vector
-    if(box2dComponent.interpolate) {
-    }
     
     final float alpha = 0.2f;
     final float invAlpha = 1.0f - alpha;
     
     if(box2dComponent.interpolate && box2dComponent.ticksToInterpolate > 0){
       Vector2 diff = position.cpy().sub(transformPosition.x/2f, transformPosition.y/2f);
-      box2dComponent.intVector.add(diff.scl(0.5f));
+      box2dComponent.intVector.add(diff.scl(0.2f));
         
       Vector2 interpolatedVector = position.cpy().lerp(box2dComponent.intVector, alpha);
       float interpolatedAng = ( box2dComponent.body.getAngle() * invAlpha) + (box2dComponent.intAngle * alpha); 

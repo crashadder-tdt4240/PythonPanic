@@ -18,14 +18,12 @@ public interface NetSession{
   public Observable<NetUser> onUserLeft();
   public Observable<NetUser> onUserJoin();
   
-  // returns the random number generator
-  public Single<Random> getRandomNumberGenerator();
+  // returns the seed
+  public long getSeed();
+  public long getLocalSeed();
   public void leaveSession();
 
   public void dispose();
-
-  // get socket to user
-  public IMessageSocket getSocket(NetUser user);
 
   // Socket that proxies all messages from and to all users
   public IMessageSocket getSessionSocket();

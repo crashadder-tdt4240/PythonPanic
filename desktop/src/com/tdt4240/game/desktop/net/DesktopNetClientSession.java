@@ -38,12 +38,15 @@ public class DesktopNetClientSession extends DesktopNetSession{
       message.putString(localUser.getUserName());
       message.getBuffer().putLong(localUser.getUserId().getMostSignificantBits());
       message.getBuffer().putLong(localUser.getUserId().getLeastSignificantBits());
+      message.getBuffer().putLong(getLocalSeed());
       this.socket.sendMessage(message);
       this.socket.getMessages(1).subscribe((INetData m) -> {
         NetMessage msg = (NetMessage)m;
         ByteBuffer buffer = msg.getBuffer();
         String name = msg.getString();
         UUID userId = new UUID(buffer.getLong(), buffer.getLong());
+        long remoteSeed = buffer.getLong();
+        addRandomNumber(remoteSeed);
         System.out.printf("User joined session %s, %s\n", name, userId);
         NetUser user = new DesktopNetUser(userId, name);
         addUser(user);
@@ -61,11 +64,6 @@ public class DesktopNetClientSession extends DesktopNetSession{
   }
 
   @Override
-  public MessageSocket getSocket(NetUser user) {
-    return socket;
-  }
-
-  @Override
   public Observable<NetUser> onUserJoin() {
     return null;
   }
@@ -78,10 +76,6 @@ public class DesktopNetClientSession extends DesktopNetSession{
   @Override
   public void leaveSession() {
     
-  }
-  @Override
-  public Single<Random> getRandomNumberGenerator() {
-    return null;
   }
 
 }

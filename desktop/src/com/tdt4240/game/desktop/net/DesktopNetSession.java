@@ -42,15 +42,15 @@ public abstract class DesktopNetSession implements NetSession{
     return localuser;
   }
 
-  public void addRandomNumber(int val){
+  public void addRandomNumber(long val){
     accRandomNumber += val;
   }
 
-  public long getRandomNumber(){
+  public long getSeed(){
     return accRandomNumber;
   }
 
-  public long getPersonalNumber(){
+  public long getLocalSeed(){
     return randomNumber;
   }
 

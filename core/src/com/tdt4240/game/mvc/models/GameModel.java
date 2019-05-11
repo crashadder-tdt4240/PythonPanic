@@ -17,8 +17,11 @@ import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.managers.NetworkManager;
 import com.tdt4240.game.mvc.GameMVCParams;
+import com.tdt4240.game.net.message.IMessageSocket;
 import com.tdt4240.game.net.message.INetData;
+import com.tdt4240.game.net.message.MessageSocket;
 import com.tdt4240.game.net.message.NetMessage;
+import com.tdt4240.game.net.session.NetUser;
 
 public class GameModel extends MVCModel{
   private EcsEngine engine;
@@ -29,10 +32,11 @@ public class GameModel extends MVCModel{
   private ComponentMapper<NetworkComponent> netMapper;
   private ComponentMapper<Box2dComponent> box2dMapper;
 
+  // list of players in game
+  private List<NetUser> players;
+
   private GameMVCParams params = new GameMVCParams();
 
-  private float acc = 0;
-  private float acc2 = 0;
   public GameModel(){
     engine = new EcsEngine();
     
@@ -51,9 +55,13 @@ public class GameModel extends MVCModel{
     GameLevel level = null;
     this.params = params;
     if(params.isMultiplayer){
-      params.session.getSessionSocket().getMessages(3).subscribe((INetData data) -> {
-        NetMessage message = (NetMessage) data;
-      });
+      IMessageSocket socket = params.session.getSessionSocket();
+      
+      // listne to game events, keeps track of when a player has died
+      socket.getMessages(100).subscribe((INetData data) -> 
+        onUserLost((NetMessage)data)
+      );
+      
       NetworkManager manager = engine.getWorld().getSystem(NetworkManager.class);
       
 
@@ -70,6 +78,10 @@ public class GameModel extends MVCModel{
       level.setup();
     }
 
+  }
+
+  private void onUserLost(NetMessage message){
+    // todo: set user to dead, make sure to end game when there is only one player left
   }
 
   public EcsEngine getEngine(){

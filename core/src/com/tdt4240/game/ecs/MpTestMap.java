@@ -88,7 +88,7 @@ public class MpTestMap extends GameLevel{
     NetworkComponent netComponent = netMapper.create(entity);
     netComponent.localId = entity;
     netComponent.remote = false;
-    netComponent.syncFreq = 6;//64/12;
+    netComponent.syncFreq = 8;//64/12;
 
     Powerup test = new SpeedPowerup();
     test.life = 20;

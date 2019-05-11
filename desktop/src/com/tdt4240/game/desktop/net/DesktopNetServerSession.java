@@ -15,6 +15,7 @@ import com.tdt4240.game.net.session.NetUser;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.subjects.SingleSubject;
 
 public class DesktopNetServerSession extends DesktopNetSession{
   
@@ -22,6 +23,7 @@ public class DesktopNetServerSession extends DesktopNetSession{
   
 
   private ArrayList<MessageSocket> sockets = new ArrayList<>();
+  
 
   public DesktopNetServerSession(UUID id, NetUser local){
     super(id, local);
@@ -43,12 +45,15 @@ public class DesktopNetServerSession extends DesktopNetSession{
       message.putString(localUser.getUserName());
       message.getBuffer().putLong(localUser.getUserId().getMostSignificantBits());
       message.getBuffer().putLong(localUser.getUserId().getLeastSignificantBits());
+      message.getBuffer().putLong(getLocalSeed());
       messageSocket.sendMessage(message);
       messageSocket.getMessages(1).subscribe((INetData m) -> {
         NetMessage msg = (NetMessage)m;
         String name = msg.getString();
         ByteBuffer buffer = msg.getBuffer();
         UUID userId = new UUID(buffer.getLong(), buffer.getLong());
+        long remoteSeed = buffer.getLong();
+        addRandomNumber(remoteSeed);
         System.out.printf("User joined session %s, %s\n", name ,userId.toString());
         NetUser user = new DesktopNetUser(userId, name);
         addUser(user);
@@ -73,19 +78,10 @@ public class DesktopNetServerSession extends DesktopNetSession{
     return null;
   }
 
-  @Override
-  public Single<Random> getRandomNumberGenerator() {
-    return null;
-  }
 
   @Override
   public MessageSocket getSessionSocket() {
     return sockets.get(0);
-  }
-
-  @Override
-  public MessageSocket getSocket(NetUser user) {
-    return null;
   }
 
   @Override

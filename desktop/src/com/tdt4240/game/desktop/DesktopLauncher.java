@@ -10,6 +10,11 @@ import com.tdt4240.game.net.session.NetUserService;
 
 public class DesktopLauncher {
   public static void main (String[] arg) {
+    // start headless server instead of running the game
+    if(arg[1] == "headless"){
+
+    }
+
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
     
 

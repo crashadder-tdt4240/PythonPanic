@@ -43,7 +43,8 @@ public abstract class DesktopNetSession implements NetSession{
   }
 
   public void addRandomNumber(long val){
-    accRandomNumber += val;
+    // xor values
+    accRandomNumber ^= val;
   }
 
   public long getSeed(){

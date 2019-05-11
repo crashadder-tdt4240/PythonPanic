@@ -2,6 +2,7 @@ package com.tdt4240.game.mvc.controllers;
 
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.tdt4240.game.mvc.MVCManager;
 import com.tdt4240.game.mvc.MusicManager;
 import com.tdt4240.game.mvc.models.SettingsMenuModel;
 import com.tdt4240.game.mvc.views.GdxScreenView;

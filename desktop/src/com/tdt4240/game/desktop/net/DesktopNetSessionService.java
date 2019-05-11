@@ -27,8 +27,6 @@ public class DesktopNetSessionService implements NetSessionService{
   public Single<NetSession> clientSession(NetUser user){
     DesktopNetClientSession clientSession = new DesktopNetClientSession(UUID.randomUUID(), user);
     return clientSession.connectToHost().map((MessageSocket socket) -> {
-      System.out.println("Got socket");
-      System.out.println(clientSession);
       return clientSession;
     });
   }

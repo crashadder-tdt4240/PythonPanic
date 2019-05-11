@@ -51,7 +51,6 @@ public class ContactSystem extends IteratingSystem implements ContactListener{
       Box2dComponent box2dComponent1 = box2dMapper.get(entity1);
       box2dComponent1.contact = contact;
       box2dComponent1.contactWith = entity2;
-      System.out.printf("Update contact %d %d %b\n", entity1, entity2, contact);
     }
   }
   // move common code to updateContact

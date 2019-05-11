@@ -117,7 +117,6 @@ public class Assets {
       assetManager.load(assetDescriptor);
       assetManager.finishLoadingAsset(assetDescriptor.fileName);
     }
-    System.out.println(assetManager.isLoaded(assetDescriptor.fileName));
     return assetManager.get(assetDescriptor);
   }
 

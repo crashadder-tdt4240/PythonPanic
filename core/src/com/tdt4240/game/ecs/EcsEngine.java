@@ -14,17 +14,21 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.tdt4240.game.ecs.components.Box2dComponent;
+
+import com.tdt4240.game.ecs.managers.NetworkManager;
+
 import com.tdt4240.game.ecs.systems.ContactSystem;
 import com.tdt4240.game.ecs.systems.DrawSystem;
 import com.tdt4240.game.ecs.systems.KillBoxSystem;
 import com.tdt4240.game.ecs.systems.PhysicsSystem;
 import com.tdt4240.game.ecs.systems.PlayerInputSystem;
+import com.tdt4240.game.ecs.systems.PowerupSystem;
 import com.tdt4240.game.ecs.systems.SnakeSystem;
 import com.tdt4240.game.ecs.systems.SpriteSystem;
 
 public class EcsEngine{
   private World world;
-  private int tps = 120;
+  private int tps = 64;
   private int tickCounter = 0;
   private float acc = 0;
 
@@ -40,6 +44,10 @@ public class EcsEngine{
     SpriteSystem spriteSystem = new SpriteSystem();
     SnakeSystem snakeSystem = new SnakeSystem();
     KillBoxSystem killBoxSystem = new KillBoxSystem();
+    PowerupSystem powerupSystem = new PowerupSystem();
+
+    NetworkManager networkManager = new NetworkManager();
+
     WorldConfiguration config = new WorldConfigurationBuilder()
       .with(drawSystem)
       .with(contactSystem)
@@ -48,6 +56,8 @@ public class EcsEngine{
       .with(spriteSystem)
       .with(snakeSystem)
       .with(killBoxSystem)
+      .with(networkManager)
+      .with(powerupSystem)
       .build();
     
 
@@ -59,9 +69,13 @@ public class EcsEngine{
 
     addEntityListener(Aspect.one(Box2dComponent.class), new Box2dEntityListener(world, bWorld));
 
-    TestMap testMap = new TestMap(world, bWorld);
-    testMap.setup();
+    //TestMap testMap = new TestMap(world, bWorld);
+    //testMap.setup();
 
+  }
+
+  public World getWorld(){
+    return world;
   }
 
   public com.badlogic.gdx.physics.box2d.World getBox2dWorld(){

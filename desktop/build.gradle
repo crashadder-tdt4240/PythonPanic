@@ -12,6 +12,9 @@ task run(dependsOn: classes, type: JavaExec) {
     standardInput = System.in
     workingDir = project.assetsDir
     ignoreExitValue = true
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
 }
 
 task debug(dependsOn: classes, type: JavaExec) {

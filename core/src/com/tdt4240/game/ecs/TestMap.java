@@ -2,7 +2,6 @@ package com.tdt4240.game.ecs;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.tdt4240.game.assets.Assets;
 import com.tdt4240.game.ecs.components.Box2dComponent;
@@ -20,22 +20,27 @@ import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.SnakeComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
+import com.tdt4240.game.ecs.factory.SnakeFactory;
 import com.tdt4240.game.utils.Box2DUtils;
 
-public class TestMap{
-
-  private World world;
-  private com.badlogic.gdx.physics.box2d.World physicsWorld;
-  
-  public TestMap(World world, com.badlogic.gdx.physics.box2d.World physicsWorld){
-    this.world = world;
-    this.physicsWorld = physicsWorld;
+public class TestMap extends GameLevel{
+  private Vector2 worldSize;
+  public TestMap(World w, com.badlogic.gdx.physics.box2d.World box2d, Vector2 worldSize){
+    super(w, box2d);
+    this.worldSize = worldSize;
   }
+  
 
   public void setup(){
+    World world = getWorld();
+    com.badlogic.gdx.physics.box2d.World physicsWorld = getBox2dWorld();
     // Create surface for drawing to
-    Pixmap surface = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Format.RGB888);
+
+    SnakeFactory snakeFactory = new SnakeFactory(world);
+
+    Pixmap surface = new Pixmap((int)worldSize.x, (int)worldSize.y, Format.RGB888);
     Texture surfaceTexture = new Texture(surface);
+
 
     Texture testTexture = Assets.getInstance().getAsset("texture.python-head-blue.png");//new Texture(Gdx.files.internal("textures/test.png"));
     //surfaceTexture.bind(1);
@@ -43,20 +48,18 @@ public class TestMap{
 
     // Create sprite for the snakes
     Decal surfaceSprite = Decal.newDecal(
-      Gdx.graphics.getWidth(), 
-      Gdx.graphics.getHeight(), 
+      surface.getWidth()*2,
+      surface.getHeight()*2, 
       new TextureRegion(surfaceTexture)
     );
 
+    TextureRegion snakeRegion = new TextureRegion(testTexture);
+    
 
-    Decal sprite = Decal.newDecal(16, 16, new TextureRegion(testTexture), true);  
-    Decal sprite2 = Decal.newDecal(16, 16, new TextureRegion(testTexture), true);
+    int snake1 = snakeFactory.createEntity(physicsWorld, Vector3.Zero.cpy(), snakeRegion, Color.GREEN);
+    int snake2 = snakeFactory.createEntity(physicsWorld, Vector3.Zero.cpy(), snakeRegion, Color.YELLOW);
 
-    Body body1 = Box2DUtils.createBody(physicsWorld, Box2DUtils.DYNAMIC_BODY_DEF, Box2DUtils.PLAYER_FIXTURE_DEF);
-    Body body2 = Box2DUtils.createBody(physicsWorld, Box2DUtils.DYNAMIC_BODY_DEF, Box2DUtils.PLAYER_FIXTURE_DEF);
     Body body3 = Box2DUtils.createBody(physicsWorld, Box2DUtils.STATIC_BODY_DEF, Box2DUtils.PLAYER_FIXTURE_DEF);
-    int entity1 = world.create();
-    int entity2 = world.create();
     int surfaceEntity = world.create();
     int killEntity = world.create();
 
@@ -69,12 +72,9 @@ public class TestMap{
     ComponentMapper<PixmapComponent> pixmapMapper = world.getMapper(PixmapComponent.class);
     ComponentMapper<KillBoxComponent> killBoxMapper = world.getMapper(KillBoxComponent.class);
 
-    Box2dComponent box2dComponent = box2dMapper.create(entity1);
-    TransformComponent transformComponent = transformMapper.create(entity1);
-    box2dComponent.body = body1;
+    TransformComponent transformComponent = transformMapper.get(snake1);
 
-    Box2dComponent box2dComponent2 = box2dMapper.create(entity2);
-    TransformComponent transformComponent2 = transformMapper.create(entity2);
+    TransformComponent transformComponent2 = transformMapper.get(snake2);
 
     Box2dComponent box2dComponent3 = box2dMapper.create(killEntity);
     TransformComponent transformComponent4 = transformMapper.create(killEntity);
@@ -84,14 +84,10 @@ public class TestMap{
 
 
     TransformComponent transformComponent3 = transformMapper.create(surfaceEntity);
-
-    SpriteComponent spriteComponent1 = spriteMapper.create(entity1);
-    SpriteComponent spriteComponent2 = spriteMapper.create(entity2);
     SpriteComponent spriteComponent3 = spriteMapper.create(surfaceEntity);
 
-    SnakeComponent snakeComponent = snakeMapper.create(entity1);
-    DrawComponent drawComponent = drawMapper.create(entity1);
-    DrawComponent drawComponent2 = drawMapper.create(entity2);
+    DrawComponent drawComponent = drawMapper.get(snake1);
+    DrawComponent drawComponent2 = drawMapper.get(snake2);
 
     drawComponent.drawTo = surfaceEntity;
     drawComponent2.drawTo = surfaceEntity;
@@ -100,8 +96,6 @@ public class TestMap{
 
     pixmapComponent.pixmap = surface;
     
-    drawComponent.color = Color.GREEN;
-    drawComponent2.color = Color.RED;
 
 
     transformComponent.transform.translate(0, 0, -50);
@@ -109,15 +103,11 @@ public class TestMap{
     transformComponent3.transform.translate(0, 0, -100);
    // transformComponent3.transform.rotate(0, 1, 0, 60f);
 
-    spriteComponent1.sprite = sprite;
-    spriteComponent2.sprite = sprite2;
     spriteComponent3.sprite = surfaceSprite;
 
-    box2dComponent2.body = body2;
-    body2.setTransform(new Vector2(8, 32), 0);
-    body2.setLinearVelocity(0, -32);
-
-    inputMapper.create(entity1);
+    box2dMapper.get(snake2).body.setTransform(new Vector2(-32, 32), 0);
+    
+    inputMapper.create(snake1);
 
     //surfaceTexture.draw(surface, 0, 0);
     

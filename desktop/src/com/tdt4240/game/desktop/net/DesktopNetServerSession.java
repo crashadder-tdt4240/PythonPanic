@@ -2,11 +2,13 @@ package com.tdt4240.game.desktop.net;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
 import com.tdt4240.game.net.INetServerSocket;
 import com.tdt4240.game.net.INetSocket;
+import com.tdt4240.game.net.NetRelay;
 import com.tdt4240.game.net.NetServerSocket;
 import com.tdt4240.game.net.message.INetData;
 import com.tdt4240.game.net.message.MessageSocket;
@@ -15,6 +17,7 @@ import com.tdt4240.game.net.session.NetUser;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.subjects.SingleSubject;
 
 public class DesktopNetServerSession extends DesktopNetSession{
   
@@ -22,9 +25,15 @@ public class DesktopNetServerSession extends DesktopNetSession{
   
 
   private ArrayList<MessageSocket> sockets = new ArrayList<>();
+  
 
   public DesktopNetServerSession(UUID id, NetUser local){
     super(id, local);
+  }
+
+  public void createSession(List<INetSocket> sockets){
+    // todo: relay messages
+    NetRelay relay = new NetRelay(sockets);
   }
 
 
@@ -40,16 +49,21 @@ public class DesktopNetServerSession extends DesktopNetSession{
       // exchange user info
       NetMessage message = new NetMessage(1);
       NetUser localUser = getLocalUser();
-      
+      message.putString(localUser.getUserName());
       message.getBuffer().putLong(localUser.getUserId().getMostSignificantBits());
       message.getBuffer().putLong(localUser.getUserId().getLeastSignificantBits());
+      message.getBuffer().putLong(getLocalSeed());
       messageSocket.sendMessage(message);
       messageSocket.getMessages(1).subscribe((INetData m) -> {
         NetMessage msg = (NetMessage)m;
+        String name = msg.getString();
         ByteBuffer buffer = msg.getBuffer();
         UUID userId = new UUID(buffer.getLong(), buffer.getLong());
-        System.out.println("User joined session " + userId.toString());
-        
+        long remoteSeed = buffer.getLong();
+        addRandomNumber(remoteSeed);
+        System.out.printf("User joined session %s, %s\n", name ,userId.toString());
+        NetUser user = new DesktopNetUser(userId, name);
+        addUser(user);
       });
     });
   }
@@ -71,19 +85,10 @@ public class DesktopNetServerSession extends DesktopNetSession{
     return null;
   }
 
-  @Override
-  public Single<Random> getRandomNumberGenerator() {
-    return null;
-  }
 
   @Override
   public MessageSocket getSessionSocket() {
-    return null;
-  }
-
-  @Override
-  public MessageSocket getSocket(NetUser user) {
-    return null;
+    return sockets.get(0);
   }
 
   @Override

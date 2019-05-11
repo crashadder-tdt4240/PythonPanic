@@ -6,13 +6,15 @@ import java.util.HashMap;
 import com.tdt4240.game.net.INetSocket;
 
 import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.ReplaySubject;
 import io.reactivex.subjects.Subject;
 
 
 public class MessageSocket implements IMessageSocket, Runnable{
   private boolean disposed = false;
-  private Subject<INetData> messageSubject = PublishSubject.create();
+  private Subject<INetData> messageSubject = ReplaySubject.create(4);
   private HashMap<Integer, Subject<INetData>> channelSubjects = new HashMap<>();
   private INetSocket socket;
   
@@ -28,12 +30,15 @@ public class MessageSocket implements IMessageSocket, Runnable{
         byte[] buffer = new byte[2048];
         int size = socket.getInputStream().read(buffer);
         if(size == -1){
-          throw new IOException("Too much data");
+          throw new IOException("End of stream");
         }
         // construct a data object, notify listeners
         NetMessage message = new NetMessage(new NetData(buffer));
         int channel = message.getChannel();
-        if(channel > 0 && channelSubjects.containsKey(channel)){
+        if(channel > 0){
+          if(!channelSubjects.containsKey(channel)){
+            channelSubjects.put(channel, ReplaySubject.create(4));
+          }      
           channelSubjects.get(channel).onNext(message);
         }
         messageSubject.onNext(message);
@@ -48,10 +53,11 @@ public class MessageSocket implements IMessageSocket, Runnable{
 
   @Override
   public void sendMessage(INetData message) {
-    //nextId++;
+    if(!socket.isConnected()){return;}
     if(disposed) { throw new RuntimeException("Socket is disposed"); }
     try{
-      socket.getOutputStream().write(message.getData());
+      byte[] data = message.getData();
+      socket.getOutputStream().write(data);
     } catch (IOException e) {
       System.err.println(e);
       dispose();
@@ -66,7 +72,7 @@ public class MessageSocket implements IMessageSocket, Runnable{
   @Override
   public Observable<INetData> getMessages(int channel) {
     if(!channelSubjects.containsKey(channel)){
-      channelSubjects.put(channel, PublishSubject.create());
+      channelSubjects.put(channel, ReplaySubject.create(4));
     }
     return channelSubjects.get(channel);
   }

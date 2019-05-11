@@ -28,6 +28,9 @@ public abstract class DesktopNetSession implements NetSession{
     return this.id;
   }
 
+  protected void addUser(NetUser user){
+    this.users.add(user);
+  }
   public List<NetUser> getConnectedUsers(){
     return this.users;
   }
@@ -36,15 +39,16 @@ public abstract class DesktopNetSession implements NetSession{
     return localuser;
   }
 
-  public void addRandomNumber(int val){
-    accRandomNumber += val;
+  public void addRandomNumber(long val){
+    // xor values
+    accRandomNumber ^= val;
   }
 
-  public long getRandomNumber(){
+  public long getSeed(){
     return accRandomNumber;
   }
 
-  public long getPersonalNumber(){
+  public long getLocalSeed(){
     return randomNumber;
   }
 

@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+
 import com.tdt4240.game.mvc.models.GameModel;
 
 public class GameView extends MVCView<GameModel>{
@@ -15,14 +17,19 @@ public class GameView extends MVCView<GameModel>{
   private CameraGroupStrategy cameraGroupStrategy;
   private Camera gameCamera;
 
-  
   private Box2DDebugRenderer debugRenderer;
   public GameView(GameModel model){
     super(model);
     
-    gameCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+    Vector2 worldSize = getModel().getWorldSize();
+    float aspectRatio = (float)Gdx.graphics.getHeight()/(float)Gdx.graphics.getWidth();
+    gameCamera = new OrthographicCamera(worldSize.x*2, worldSize.x*aspectRatio*2);
+    System.out.println(aspectRatio);
+    
     gameCamera.far = 10000f;
     gameCamera.position.set(0, 0, 0);
+    gameCamera.update(true);
 
     cameraGroupStrategy = new CameraGroupStrategy(gameCamera);
     decalBatch = new DecalBatch(2048, cameraGroupStrategy);
@@ -38,6 +45,7 @@ public class GameView extends MVCView<GameModel>{
   }
 
   public void render(float dtime){
+
     gameCamera.update();
     for(Decal sprite : getModel().getDecals()){
       decalBatch.add(sprite);
@@ -46,10 +54,10 @@ public class GameView extends MVCView<GameModel>{
     debugRenderer.render(getModel().getEngine().getBox2dWorld(), gameCamera.combined);
   }
 
- 
-
-
-
+  @Override
+  public void resize(int width, int height) {
+    super.resize(width, height);
+  }
 
 
 }

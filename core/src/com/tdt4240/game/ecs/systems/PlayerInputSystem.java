@@ -21,7 +21,7 @@ public class PlayerInputSystem extends IteratingSystem{
     PlayerInputComponent playerInputComponent = pInputMapper.get(entityId);
     Box2dComponent box2dComponent = box2dMapper.get(entityId);
     Body body = box2dComponent.body;
-    float angVeloc = 2.1f*(playerInputComponent.steerInput.x - playerInputComponent.steerInput.y);
+    float angVeloc = 6.1f*(playerInputComponent.steerInput.x - playerInputComponent.steerInput.y);
     body.setAngularVelocity(angVeloc);
   }
 }

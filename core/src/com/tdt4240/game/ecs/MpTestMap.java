@@ -21,6 +21,7 @@ import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.PowerupModifiersComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
+import com.tdt4240.game.ecs.factory.PowerupFactory;
 import com.tdt4240.game.ecs.factory.SnakeFactory;
 import com.tdt4240.game.ecs.powerups.Powerup;
 import com.tdt4240.game.ecs.powerups.SpeedPowerup;

@@ -23,6 +23,7 @@ import com.tdt4240.game.net.message.IMessageSocket;
 import com.tdt4240.game.net.message.INetData;
 import com.tdt4240.game.net.message.NetMessage;
 import com.tdt4240.game.net.session.NetUser;
+import com.tdt4240.game.utils.Box2DUtils;
 
 public class GameModel extends MVCModel{
   private EcsEngine engine;
@@ -52,6 +53,8 @@ public class GameModel extends MVCModel{
 
     netMapper = engine.getMapper(NetworkComponent.class);
     box2dMapper = engine.getMapper(Box2dComponent.class);
+
+    Box2DUtils.world = getEngine().getBox2dWorld();
 
   }
 

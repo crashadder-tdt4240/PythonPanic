@@ -58,7 +58,7 @@ public class SnakeFactory extends EntityFactory{
     
     Body body = Box2DUtils.createBody(bWorld, Box2DUtils.DYNAMIC_BODY_DEF, Box2DUtils.PLAYER_FIXTURE_DEF);
     tComponentMapper.get(entity).transform.setTranslation(pos);
-    sComponentMapper.get(entity).sprite = Decal.newDecal(texture, true);
+    sComponentMapper.get(entity).sprite = Decal.newDecal(32,32, texture, true);
     dComponentMapper.get(entity).color = color;
     bComponentMapper.get(entity).body = body;
     body.setTransform(new Vector2(pos.x, pos.y), 0);

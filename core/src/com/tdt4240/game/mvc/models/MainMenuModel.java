@@ -27,7 +27,7 @@ public class MainMenuModel extends GdxStageModel{
     MusicManager music = MusicManager.getInstance();
         
     skin = assets.getAsset("skin.uiskin.json");
-    music.playMusic();
+    //music.playMusic();
 
 
     table = new Table();

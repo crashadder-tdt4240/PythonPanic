@@ -34,11 +34,34 @@ public class Box2DUtils{
     active = true;
   }};
 
+  public static final BodyDef WALL_BODY_DEF = new BodyDef() {{
+    type = BodyType.DynamicBody;
+    fixedRotation = false;
+    active = true;
+  }};
+
   public static final FixtureDef PLAYER_FIXTURE_DEF = new FixtureDef(){{
     shape = new CircleShape();
     shape.setRadius(7);
     density = 1;
     filter.categoryBits = Category.PLAYER;
+    filter.maskBits = 0b110;
+  }};
+
+  public static final FixtureDef WALL_FIXTURE_DEF = new FixtureDef(){{
+    shape = new CircleShape();
+    shape.setRadius(5);
+    density = 1;
+    filter.categoryBits = Category.WALL;
+    filter.maskBits = Category.PLAYER;
+  }};
+
+  public static final FixtureDef ITEM_FIXTURE_DEF = new FixtureDef(){{
+    shape = new CircleShape();
+    shape.setRadius(10);
+    density = 1;
+    filter.categoryBits = Category.ITEM;
+    filter.maskBits = Category.PLAYER;
   }};
 
   public static Body createBody(World world, BodyDef bodyDef, FixtureDef ...fixtureDefs){

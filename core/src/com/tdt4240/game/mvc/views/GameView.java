@@ -51,7 +51,7 @@ public class GameView extends MVCView<GameModel>{
       decalBatch.add(sprite);
     }
     decalBatch.flush();
-    debugRenderer.render(getModel().getEngine().getBox2dWorld(), gameCamera.combined);
+    //debugRenderer.render(getModel().getEngine().getBox2dWorld(), gameCamera.combined);
   }
 
   @Override

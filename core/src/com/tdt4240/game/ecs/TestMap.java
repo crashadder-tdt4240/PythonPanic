@@ -1,5 +1,7 @@
 package com.tdt4240.game.ecs;
 
+import java.util.Random;
+
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
@@ -20,6 +22,7 @@ import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.SnakeComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
+import com.tdt4240.game.ecs.factory.PowerupFactory;
 import com.tdt4240.game.ecs.factory.SnakeFactory;
 import com.tdt4240.game.utils.Box2DUtils;
 
@@ -59,7 +62,7 @@ public class TestMap extends GameLevel{
     int snake1 = snakeFactory.createEntity(physicsWorld, Vector3.Zero.cpy(), snakeRegion, Color.GREEN);
     int snake2 = snakeFactory.createEntity(physicsWorld, Vector3.Zero.cpy(), snakeRegion, Color.YELLOW);
 
-    Body body3 = Box2DUtils.createBody(physicsWorld, Box2DUtils.STATIC_BODY_DEF, Box2DUtils.PLAYER_FIXTURE_DEF);
+    Body body3 = Box2DUtils.createBody(physicsWorld, Box2DUtils.STATIC_BODY_DEF, Box2DUtils.WALL_FIXTURE_DEF);
     int surfaceEntity = world.create();
     int killEntity = world.create();
 
@@ -108,6 +111,22 @@ public class TestMap extends GameLevel{
     box2dMapper.get(snake2).body.setTransform(new Vector2(-32, 32), 0);
     
     inputMapper.create(snake1);
+
+
+    PowerupFactory powerupFactory = new PowerupFactory(world);
+    Random random = new Random();
+    powerupFactory.spawnRandomPowerup(new Vector2(-100, -100), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(-200, -200), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(-300, -300), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(100, -100), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(200, -200), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(300, -300), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(-100, 100), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(-200, 200), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(-300, 300), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(100, 100), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(200, 200), random);
+    powerupFactory.spawnRandomPowerup(new Vector2(300, 300), random);
 
     //surfaceTexture.draw(surface, 0, 0);
     

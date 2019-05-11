@@ -12,6 +12,7 @@ import com.tdt4240.game.ecs.components.DrawComponent;
 import com.tdt4240.game.ecs.components.PowerupModifiersComponent;
 import com.tdt4240.game.ecs.components.SnakeComponent;
 import com.tdt4240.game.ecs.powerups.Powerup;
+import com.tdt4240.game.ecs.powerups.SizePowerup;
 import com.tdt4240.game.ecs.powerups.SpeedPowerup;
 
 public class SnakeSystem extends IteratingSystem{
@@ -22,6 +23,7 @@ public class SnakeSystem extends IteratingSystem{
   private ComponentMapper<PowerupModifiersComponent> powerupModMapper;
   
   private float baseSpeed = 100f;
+  private float baseSize = 4f;
   public SnakeSystem(){
     super(Aspect.all(Box2dComponent.class, SnakeComponent.class));
   
@@ -30,11 +32,38 @@ public class SnakeSystem extends IteratingSystem{
 
   public void process(int entity){
     // "hack" so final speed can be modified in lambda
-    final float[] finalSpeed = {baseSpeed};
+    final float[] finalSpeed = {baseSpeed, 0};
+    final float[] finalSize = {baseSize, 0};
     
+
+  
+
+    if(powerupModMapper.has(entity)){
+      
+      PowerupModifiersComponent modComponent = powerupModMapper.get(entity);
+      modComponent.powerups.stream().filter((Powerup p) -> (p instanceof SpeedPowerup)).forEachOrdered((Powerup powerup) -> {
+        SpeedPowerup speedmod = (SpeedPowerup)powerup;
+        finalSpeed[1] += baseSpeed * speedmod.modifier; 
+      });
+
+      modComponent.powerups.stream().filter((Powerup p) -> (p instanceof SizePowerup)).forEachOrdered((Powerup powerup) -> {
+        SizePowerup sizemod = (SizePowerup)powerup;
+        finalSize[1] += baseSize * sizemod.modifier; 
+      });
+
+      if(finalSpeed[1] > 0){
+        finalSpeed[0] = finalSpeed[1];
+      }
+      if(finalSize[1] > 0){
+        finalSize[0] = finalSize[1];
+      }
+    }
+    
+
     SnakeComponent snake = snakeMapper.get(entity);
     if(drawMapper.has(entity) ) {
       DrawComponent draw = drawMapper.get(entity);
+      draw.radius = (int)finalSize[0];
       if(draw.draw){
         snake.holeCooldown -= getWorld().getDelta();			
         if(snake.holeCooldown <= 0){
@@ -49,17 +78,6 @@ public class SnakeSystem extends IteratingSystem{
         }
       }
       
-    }
-  
-
-    if(powerupModMapper.has(entity)){
-      
-      PowerupModifiersComponent modComponent = powerupModMapper.get(entity);
-      if (modComponent.powerups.size() > 0) {finalSpeed[0] =  0;}
-      modComponent.powerups.stream().filter((Powerup p) -> (p instanceof SpeedPowerup)).forEachOrdered((Powerup powerup) -> {
-        SpeedPowerup speedmod = (SpeedPowerup)powerup;
-        finalSpeed[0] += baseSpeed * speedmod.modifier; 
-      });
     }
 
     

@@ -1,7 +1,6 @@
 package com.tdt4240.game.mvc.models;
 
 import java.util.HashMap;
-import java.util.concurrent.Callable;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -9,10 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.internal.operators.observable.ObservableCreate;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 

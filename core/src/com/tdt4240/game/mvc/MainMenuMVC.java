@@ -15,8 +15,7 @@ public class MainMenuMVC extends MVC<MainMenuModel, GdxScreenView<MainMenuModel>
     setModel(new MainMenuModel());
     setView(new MainMenuView(getModel()));
     setController(new MainMenuController(getView(), getModel()));
-
-
+    
   }
 }
 

@@ -43,6 +43,17 @@ public class MainMenuController extends MVCController<GdxScreenView<MainMenuMode
             }
         });
 
+        model.onEvent("HELP").subscribe((Event event) -> {
+            if(event instanceof InputEvent){
+                InputEvent ievent = (InputEvent)event;
+                if(ievent.getType() == InputEvent.Type.touchUp){
+                    //This needs to start instance of settings
+                    MVCManager.getInstance().createMVC("HELP");
+                } 
+            }
+        });
+
+
         model.onEvent("EXIT").subscribe((Event event) -> {
             if(event instanceof InputEvent){
                 InputEvent ievent = (InputEvent)event;

@@ -36,7 +36,21 @@ public class SettingsMenuController extends MVCController<GdxScreenView<Settings
                 } 
             }
         });
+
+
+        model.onEvent("BACK").subscribe((Event event) -> {
+            if(event instanceof InputEvent){
+                InputEvent ievent = (InputEvent)event;
+                if(ievent.getType() == InputEvent.Type.touchUp){
+                    MVCManager.getInstance().createMVC("MAIN_MENU");
+                } 
+            }
+        });
+
     }
+
+
+    
 
 
     public InputProcessor getInputManager(){

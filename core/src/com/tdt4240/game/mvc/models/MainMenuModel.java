@@ -15,7 +15,6 @@ import com.tdt4240.game.mvc.MusicManager;
 
 public class MainMenuModel extends GdxStageModel{
   private Stage stage;
-  private TextButton startButton, exitButton, settingsButton;
   private TextButton.TextButtonStyle style;
   private Table table;
   private Skin skin;
@@ -33,20 +32,21 @@ public class MainMenuModel extends GdxStageModel{
 
     table = new Table();
     table.setBackground(splash);
-
-  
     
     stage = new Stage();
-    startButton = new TextButton("START",skin);
-
-    exitButton = new TextButton("EXIT",skin);
-    settingsButton = new TextButton("SETTINGS",skin);
-
-    startButton.setColor(Color.YELLOW);
-    settingsButton.setColor(Color.BLUE);
-
+    TextButton startButton = new TextButton("START",skin);
     TextButton hostButton = new TextButton("HOST", skin);
     TextButton joinButton = new TextButton("JOIN", skin);
+    TextButton exitButton = new TextButton("EXIT",skin);
+    TextButton settingsButton = new TextButton("SETTINGS",skin);
+    TextButton helpButton = new TextButton("HELP", skin);
+
+    startButton.setColor(Color.YELLOW);
+    hostButton.setColor(Color.YELLOW);
+    joinButton.setColor(Color.YELLOW);
+    exitButton.setColor(Color.YELLOW);
+    settingsButton.setColor(Color.YELLOW);
+    helpButton.setColor(Color.YELLOW);
 
 
     table.setFillParent(true);
@@ -61,6 +61,8 @@ public class MainMenuModel extends GdxStageModel{
     table.add(exitButton);
     table.row();
     table.add(settingsButton);
+    table.row();
+    table.add(helpButton);
 
     table.setHeight(Gdx.graphics.getHeight());
     table.setWidth(Gdx.graphics.getWidth());
@@ -72,7 +74,7 @@ public class MainMenuModel extends GdxStageModel{
     bindActor("JOIN", joinButton);
     bindActor("EXIT", exitButton);
     bindActor("SETTINGS", settingsButton);
-
+    bindActor("HELP", helpButton);
 
   }
 

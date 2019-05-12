@@ -13,9 +13,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.tdt4240.game.assets.Assets;
 import com.tdt4240.game.ecs.components.Box2dComponent;
 import com.tdt4240.game.ecs.components.DrawComponent;
+import com.tdt4240.game.ecs.components.KillBoxComponent;
 import com.tdt4240.game.ecs.components.NetworkComponent;
 import com.tdt4240.game.ecs.components.PixmapComponent;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
@@ -26,6 +28,7 @@ import com.tdt4240.game.ecs.factory.PowerupFactory;
 import com.tdt4240.game.ecs.factory.SnakeFactory;
 import com.tdt4240.game.ecs.powerups.Powerup;
 import com.tdt4240.game.ecs.powerups.SpeedPowerup;
+import com.tdt4240.game.utils.Box2DUtils;
 
 public class MpTestMap extends GameLevel{
 
@@ -74,6 +77,8 @@ public class MpTestMap extends GameLevel{
     ComponentMapper<TransformComponent> transformMapper = getWorld().getMapper(TransformComponent.class);
     ComponentMapper<SpriteComponent> spriteMapper = getWorld().getMapper(SpriteComponent.class);
     ComponentMapper<PixmapComponent> pixmapMapper = getWorld().getMapper(PixmapComponent.class);
+    ComponentMapper<Box2dComponent> boxMapper = getWorld().getMapper(Box2dComponent.class);
+    ComponentMapper<KillBoxComponent> killMapper = getWorld().getMapper(KillBoxComponent.class);
 
     TransformComponent transformComponent3 = transformMapper.create(surfaceEntity);
     SpriteComponent spriteComponent3 = spriteMapper.create(surfaceEntity);
@@ -86,7 +91,15 @@ public class MpTestMap extends GameLevel{
     spriteComponent3.sprite = surfaceSprite;
 
     drawSurface = surfaceEntity;
+
+    // create boxing wall
+    int wallEntity = getWorld().create();
     
+
+    Body wall = Box2DUtils.createBody(getBox2dWorld(), Box2DUtils.STATIC_BODY_DEF, Box2DUtils.CreatChainWallFix(worldSize.cpy().scl(-0.25f) , worldSize.cpy().scl(0.25f)));
+
+    boxMapper.create(wallEntity).body = wall;
+    killMapper.create(wallEntity);
   }
 
   private final Vector2[] spawnLocations = {new Vector2(-500, -500), new Vector2(500, 500), new Vector2(-500, 500), new Vector2(500, -500)};
@@ -99,6 +112,7 @@ public class MpTestMap extends GameLevel{
     ComponentMapper<DrawComponent> drawMapper = getWorld().getMapper(DrawComponent.class);
     ComponentMapper<NetworkComponent> netMapper = getWorld().getMapper(NetworkComponent.class);
     ComponentMapper<PlayerInputComponent> inputMapper = getWorld().getMapper(PlayerInputComponent.class);
+
     
     inputMapper.create(entity);
     

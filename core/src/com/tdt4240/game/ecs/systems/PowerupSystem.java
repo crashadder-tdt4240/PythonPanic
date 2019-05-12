@@ -22,7 +22,7 @@ public class PowerupSystem extends IteratingSystem{
   private ComponentMapper<PowerupComponent> powerupMapper;
   private float powerupcooldown = 5;
   private PowerupFactory powerupFactory;
-  private Random random;
+  private Random random = new Random();
 
   public PowerupSystem(){
     super(Aspect.all(Box2dComponent.class).one(PowerupComponent.class, PowerupModifiersComponent.class));

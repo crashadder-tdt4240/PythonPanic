@@ -2,6 +2,7 @@ package com.tdt4240.game.mvc.controllers;
 
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
@@ -56,6 +57,30 @@ public class GameController extends MVCController<GameView, GameModel>{
     }
     updateInput(newInput);
     return handled;
+  }
+
+  @Override
+  public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    Vector2 newInput = new Vector2(0, 0);
+    if(screenX <= Gdx.graphics.getWidth()/2 ){
+      newInput.x = -1;
+    } else {
+      newInput.x = 1;
+    }
+    updateInput(newInput);
+    return true;
+  }
+
+  @Override
+  public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+    Vector2 newInput = new Vector2(0, 0);
+    if(screenX <= Gdx.graphics.getWidth()/2 ){
+      newInput.x = 1;
+    } else {
+      newInput.x = -1;
+    }
+    updateInput(newInput);
+    return true;
   }
 
 }

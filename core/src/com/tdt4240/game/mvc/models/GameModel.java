@@ -1,8 +1,10 @@
 package com.tdt4240.game.mvc.models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
@@ -18,11 +20,13 @@ import com.tdt4240.game.ecs.components.NetworkComponent;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.managers.NetworkManager;
+import com.tdt4240.game.ecs.systems.PowerupSystem;
 import com.tdt4240.game.mvc.GameMVCParams;
 import com.tdt4240.game.net.message.IMessageSocket;
 import com.tdt4240.game.net.message.INetData;
 import com.tdt4240.game.net.message.NetMessage;
 import com.tdt4240.game.net.session.NetUser;
+import com.tdt4240.game.utils.Box2DUtils;
 
 public class GameModel extends MVCModel{
   private EcsEngine engine;
@@ -53,6 +57,8 @@ public class GameModel extends MVCModel{
     netMapper = engine.getMapper(NetworkComponent.class);
     box2dMapper = engine.getMapper(Box2dComponent.class);
 
+    Box2DUtils.world = getEngine().getBox2dWorld();
+
   }
 
   public GameModel(GameMVCParams params){
@@ -69,15 +75,31 @@ public class GameModel extends MVCModel{
       );
       random.setSeed(params.session.getSeed());
       NetworkManager manager = engine.getWorld().getSystem(NetworkManager.class);
+      PowerupSystem powerup = engine.getWorld().getSystem(PowerupSystem.class);
+      powerup.setRandom(random);
       
+      int localUserIndex = 0;
+      NetUser localUser = params.session.getLocalUser();
+      // 'sort' local user
+      for(NetUser user : params.session.getConnectedUsers()){
+        if(!user.equals(localUser)){
+          long i1 = user.getUserId().getLeastSignificantBits() ^ user.getUserId().getMostSignificantBits();
+          long i2 = localUser.getUserId().getLeastSignificantBits() ^ localUser.getUserId().getMostSignificantBits(); 
+          if(i2 > i1){
+            localUserIndex++;
+          }
+        }
+      }
 
 
       MpTestMap testMap = new MpTestMap(engine.getWorld(), engine.getBox2dWorld(), getWorldSize()); 
       level = testMap;
       manager.setSocket(params.session.getSessionSocket(), testMap);
+      testMap.setPlayerIndex(localUserIndex);
+      testMap.setRandom(random);
       level.setup();
       testMap.createSnake();
-
+      
 
     } else {
       level = new TestMap(engine.getWorld(), engine.getBox2dWorld(), getWorldSize());

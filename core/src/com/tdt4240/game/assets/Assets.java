@@ -84,13 +84,15 @@ public class Assets {
   // starts preloading assets, has to be run after setup
   // should return async subject that complets once all assets are preloaded
   public <T> Observable<List<?>> preload(){
-
+    System.out.println("Preloading");
     ArrayList<Observable<?>> awaitList = new ArrayList<Observable<?>>();
 
     for(String dir : presets.getAssetDirs()){
+      System.out.println(dir);
       FileHandle indexHandle = fileResolver.resolve(String.format("%s/index.yml", dir));
       AssetsIndex index = getSync(new AssetDescriptor<>(indexHandle, AssetsIndex.class));
       Class<T> defaultClass = (Class<T>)presets.resolveAlias(index.getClassName());
+      System.out.println(fileResolver.resolve(dir).list().length);
       for(FileHandle assetFile : fileResolver.resolve(dir).list()){
         Class<T> assetClass = defaultClass;
         String ext = assetFile.extension();
@@ -100,7 +102,7 @@ public class Assets {
         if (!assetFile.equals(indexHandle)) {
           // assign name to asset after loading
           awaitList.add(getAsync(new AssetDescriptor<T>(assetFile, assetClass)).map((T asset) -> {
-            String assetName = String.format(index.resolvePrefix(assetFile.name()));
+            String assetName = String.format(index.resolvePrefix(assetFile.name())).toLowerCase();
             System.out.printf("Asset loaded %s\n", assetName);
             assetMap.put(assetName, asset);
             return asset;
@@ -123,6 +125,7 @@ public class Assets {
   @SuppressWarnings("unchecked")
   public <T> Observable<T> getAsync(AssetDescriptor<T> assetDescriptor){
     // Check if asset has been loaded
+    System.out.println("get async " + assetDescriptor.fileName);
     if(assetManager.isLoaded(assetDescriptor.fileName)){
       return Observable.just(assetManager.get(assetDescriptor));
     }
@@ -147,7 +150,7 @@ public class Assets {
 
   // get asset by name
   public <T> T getAsset(String assetname){
-    return (T)assetMap.get(assetname);
+    return (T)assetMap.get(assetname.toLowerCase());
   }
 
   public <T> void updateAsset(String assetname, T asset){
@@ -164,6 +167,7 @@ public class Assets {
   }
 
   public void loadUpdate(){
+    
     if(!assetManager.update()){
       progressSubject.onNext(getCurrentProgress());
     }
@@ -172,6 +176,8 @@ public class Assets {
       ArrayList<String> keysToRemove = new ArrayList<String>(assetsBeingLoaded.size());
       for(Entry<String, AsyncSubject<?>> kp : assetsBeingLoaded.entrySet()){
         String key = kp.getKey();
+        System.out.printf("Checking asset %s\n", key);
+        System.out.println(assetManager.isLoaded(key));
         if(assetManager.isLoaded(key)){
           AsyncSubject<?> subject = kp.getValue();
           subject.onNext(assetManager.get(key));

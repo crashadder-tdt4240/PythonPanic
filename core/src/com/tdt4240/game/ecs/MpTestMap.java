@@ -13,33 +13,50 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.tdt4240.game.assets.Assets;
+import com.tdt4240.game.ecs.components.Box2dComponent;
 import com.tdt4240.game.ecs.components.DrawComponent;
+import com.tdt4240.game.ecs.components.KillBoxComponent;
 import com.tdt4240.game.ecs.components.NetworkComponent;
 import com.tdt4240.game.ecs.components.PixmapComponent;
 import com.tdt4240.game.ecs.components.PlayerInputComponent;
 import com.tdt4240.game.ecs.components.PowerupModifiersComponent;
 import com.tdt4240.game.ecs.components.SpriteComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
+import com.tdt4240.game.ecs.factory.PowerupFactory;
 import com.tdt4240.game.ecs.factory.SnakeFactory;
 import com.tdt4240.game.ecs.powerups.Powerup;
 import com.tdt4240.game.ecs.powerups.SpeedPowerup;
+import com.tdt4240.game.utils.Box2DUtils;
 
 public class MpTestMap extends GameLevel{
 
   private SnakeFactory factory;
   private Random random = new Random();
   private TextureRegion snakeRegion;
+  private TextureRegion snakeRegion2;
   private int drawSurface = -1;
+  private int playerIndex = 0;
   private Vector2 worldSize;
 
   public MpTestMap(World world, com.badlogic.gdx.physics.box2d.World box2d, Vector2 worldSize){
     super(world, box2d);
     factory = new SnakeFactory(world);
     Assets assets = Assets.getInstance();
-    Texture tex = assets.getAsset("texture.test.png");
+    Texture tex = assets.getAsset("texture.python-head-green.png");;
+    Texture tex2 = assets.getAsset("texture.python-head-red.png");;
     snakeRegion = new TextureRegion(tex);
+    snakeRegion2 = new TextureRegion(tex2);
     this.worldSize = worldSize;
+  }
+
+  public void setRandom(Random random ) {
+    this.random = random;
+  }
+
+  public void setPlayerIndex(int index) {
+    this.playerIndex = index;
   }
 
   @Override
@@ -60,6 +77,8 @@ public class MpTestMap extends GameLevel{
     ComponentMapper<TransformComponent> transformMapper = getWorld().getMapper(TransformComponent.class);
     ComponentMapper<SpriteComponent> spriteMapper = getWorld().getMapper(SpriteComponent.class);
     ComponentMapper<PixmapComponent> pixmapMapper = getWorld().getMapper(PixmapComponent.class);
+    ComponentMapper<Box2dComponent> boxMapper = getWorld().getMapper(Box2dComponent.class);
+    ComponentMapper<KillBoxComponent> killMapper = getWorld().getMapper(KillBoxComponent.class);
 
     TransformComponent transformComponent3 = transformMapper.create(surfaceEntity);
     SpriteComponent spriteComponent3 = spriteMapper.create(surfaceEntity);
@@ -72,38 +91,43 @@ public class MpTestMap extends GameLevel{
     spriteComponent3.sprite = surfaceSprite;
 
     drawSurface = surfaceEntity;
+
+    // create boxing wall
+    int wallEntity = getWorld().create();
     
+
+    Body wall = Box2DUtils.createBody(getBox2dWorld(), Box2DUtils.STATIC_BODY_DEF, Box2DUtils.CreatChainWallFix(worldSize.cpy().scl(-0.25f) , worldSize.cpy().scl(0.25f)));
+
+    boxMapper.create(wallEntity).body = wall;
+    killMapper.create(wallEntity);
   }
 
-
+  private final Vector2[] spawnLocations = {new Vector2(-500, -500), new Vector2(500, 500), new Vector2(-500, 500), new Vector2(500, -500)};
+  private final float[] angles = {90, -90, 0, 180};
   public void createSnake(){
-    float x = (random.nextFloat() - 0.5f) * 40;
-    float y = (random.nextFloat() - 0.5f) * 40;
-    int entity = factory.createEntity(getBox2dWorld(), new Vector3(x, y, -50), snakeRegion, Color.GREEN);
+    Vector2 spawn = spawnLocations[playerIndex].cpy().scl(1);
+    
+    int entity = factory.createEntity(getBox2dWorld(), new Vector3(spawn.x, spawn.y, -50), angles[playerIndex], snakeRegion, Color.GREEN);
 
     ComponentMapper<DrawComponent> drawMapper = getWorld().getMapper(DrawComponent.class);
     ComponentMapper<NetworkComponent> netMapper = getWorld().getMapper(NetworkComponent.class);
     ComponentMapper<PlayerInputComponent> inputMapper = getWorld().getMapper(PlayerInputComponent.class);
-    ComponentMapper<PowerupModifiersComponent> powerupModMapper = getWorld().getMapper(PowerupModifiersComponent.class);
+
     
     inputMapper.create(entity);
     
     NetworkComponent netComponent = netMapper.create(entity);
     netComponent.localId = entity;
     netComponent.remote = false;
-    netComponent.syncFreq = 8;//64/12;
+    netComponent.syncFreq = 6;//64/12;
 
-    Powerup test = new SpeedPowerup();
-    test.life = 20;
-
-    powerupModMapper.get(entity).powerups.add(test);
-
-
+   
     drawMapper.get(entity).drawTo = drawSurface;
   }
-
-  public void createSnake(int remoteId, Vector3 pos){
-    int entity = factory.createEntity(getBox2dWorld(), pos, snakeRegion, Color.RED);
+  
+  // should be done in factory or in netmanager
+  public void createSnake(int remoteId, Vector3 pos, float angle){
+    int entity = factory.createEntity(getBox2dWorld(), pos, angle, snakeRegion2, Color.RED);
     ComponentMapper<DrawComponent> drawMapper = getWorld().getMapper(DrawComponent.class);
     ComponentMapper<NetworkComponent> netMapper = getWorld().getMapper(NetworkComponent.class);
     

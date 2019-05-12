@@ -34,6 +34,7 @@ public class MainMenuModel extends GdxStageModel{
     if(music.getMusicOn()){
       music.playMusic();
     }
+
     table = new Table();
     table.setBackground(splash);
     

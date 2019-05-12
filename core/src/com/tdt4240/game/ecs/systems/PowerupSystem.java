@@ -1,14 +1,18 @@
 package com.tdt4240.game.ecs.systems;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
+import com.artemis.World;
 import com.artemis.systems.IteratingSystem;
+import com.badlogic.gdx.math.Vector2;
 import com.tdt4240.game.ecs.components.Box2dComponent;
 import com.tdt4240.game.ecs.components.KillBoxComponent;
 import com.tdt4240.game.ecs.components.PowerupComponent;
 import com.tdt4240.game.ecs.components.PowerupModifiersComponent;
+import com.tdt4240.game.ecs.factory.PowerupFactory;
 import com.tdt4240.game.ecs.powerups.Powerup;
 
 public class PowerupSystem extends IteratingSystem{
@@ -16,9 +20,34 @@ public class PowerupSystem extends IteratingSystem{
   private ComponentMapper<Box2dComponent> bComponentMapper;
   private ComponentMapper<PowerupModifiersComponent> powerupModMapper;
   private ComponentMapper<PowerupComponent> powerupMapper;
+  private float powerupcooldown = 5;
+  private PowerupFactory powerupFactory;
+  private Random random = new Random();
 
   public PowerupSystem(){
     super(Aspect.all(Box2dComponent.class).one(PowerupComponent.class, PowerupModifiersComponent.class));
+  }
+
+  @Override
+  protected void setWorld(World world) {
+    super.setWorld(world);
+    powerupFactory = new PowerupFactory(world);
+  }
+  public void setRandom(Random random){
+    this.random = random;
+  }
+
+  @Override
+  protected void begin() {
+    super.begin();
+    powerupcooldown -= getWorld().getDelta();
+    if(powerupcooldown <= 0){
+      Vector2 randomPos = new Vector2(-1000 + random.nextFloat()*2000, -1000 + random.nextFloat() * 2000);
+
+      //randomPos.scl(random.nextFloat());
+      powerupFactory.spawnRandomPowerup(randomPos, random);
+      powerupcooldown = random.nextFloat()*5;
+    }
   }
   
   public void process(int entity){

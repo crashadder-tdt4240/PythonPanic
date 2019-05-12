@@ -25,18 +25,19 @@ public class PhysicsSystem extends IteratingSystem{
 
 
     TransformComponent transformComponent = transformMapper.get(entity);
+    transformComponent.prevTransform = transformComponent.transform.cpy();
     Box2dComponent box2dComponent = box2dMapper.get(entity);
     Vector2 position = box2dComponent.body.getPosition();
     Vector3 transformPosition = transformComponent.transform.getTranslation(new Vector3());
     
     // modify interpolation vector
     
-    final float alpha = 0.2f;
+    final float alpha = 0.15f;
     final float invAlpha = 1.0f - alpha;
     
     if(box2dComponent.interpolate && box2dComponent.ticksToInterpolate > 0){
       Vector2 diff = position.cpy().sub(transformPosition.x/2f, transformPosition.y/2f);
-      box2dComponent.intVector.add(diff.scl(0.2f));
+      //box2dComponent.intVector.add(diff.scl(0.1f));
         
       Vector2 interpolatedVector = position.cpy().lerp(box2dComponent.intVector, alpha);
       float interpolatedAng = ( box2dComponent.body.getAngle() * invAlpha) + (box2dComponent.intAngle * alpha); 
@@ -56,8 +57,12 @@ public class PhysicsSystem extends IteratingSystem{
 
     //todo: handle this better 
     float rotation = box2dComponent.body.getAngle();
-    transformPosition.x = position.x * 2;
-    transformPosition.y = position.y * 2;
+    transformPosition.x = position.x * 4;
+    transformPosition.y = position.y * 4;
     transformComponent.transform.set(transformPosition, new Quaternion(new Vector3(0,0,1), -90 + MathUtils.radDeg * rotation));
+
+    Vector3 deltaVec = transformPosition.cpy().sub(transformComponent.prevTransform.cpy().getTranslation(new Vector3()));
+
+    transformComponent.deltaLength = deltaVec.len();
   }
 }

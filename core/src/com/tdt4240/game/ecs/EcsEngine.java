@@ -138,5 +138,6 @@ public class EcsEngine{
     public void inserted(IntBag entities) {
       
     }
+
   }
 }

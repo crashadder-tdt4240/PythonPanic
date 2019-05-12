@@ -17,7 +17,7 @@ public class GameServer{
   
   public GameServer(){
     serverSocket = new NetServerSocket();
-    serverSocket.bind("0.0.0.0", 8888);
+    serverSocket.bind("0.0.0.0", 9909);
     serverSocket.accept().subscribe(this::onConnection);
   }
 

@@ -25,7 +25,7 @@ public class DesktopNetClientSession extends DesktopNetSession{
 
   public Single<MessageSocket> connectToHost(){
     INetSocket socket = new NetSocket();
-    socket.bind("localhost", 8888);
+    socket.bind("dock1.spaceway.network", 9909);
     
     SingleSubject<MessageSocket> callback = SingleSubject.create();
     

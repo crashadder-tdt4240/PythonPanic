@@ -27,7 +27,7 @@ public class SettingsMenuController extends MVCController<GdxScreenView<Settings
             if(event instanceof InputEvent){
                 InputEvent ievent = (InputEvent)event;
                 if(ievent.getType() == InputEvent.Type.touchUp){
-                    if(music.musicOn()){
+                    if(music.getMusicOn()){
                         music.pauseMusic();
                     }  
                     else{

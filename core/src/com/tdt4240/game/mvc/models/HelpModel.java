@@ -40,7 +40,7 @@ public class HelpModel extends GdxStageModel {
         stage = new Stage();
 
 
-        Label helpText = new Label("Manouver your snake and try to block the other players with your trail. Avoid walls and the trails of other players. Hit powerups to gain an advantage. Steer by pressing left or right on your device  ", skin);
+        Label helpText = new Label("Manouver your snake and try to block the other players with your trail. Avoid walls and the trails of other players. Hit powerups to gain an advantage. Steer by pressing left or right on your device. Good luck!", skin);
         TextButton backButton = new TextButton("BACK", skin);
 
         backButton.setColor(Color.YELLOW);

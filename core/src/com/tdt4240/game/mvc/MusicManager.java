@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 public class MusicManager {
     private static MusicManager instance = new MusicManager();
     private Music music;
+    private boolean musicOn = false;
 
   
     public MusicManager(){
@@ -16,27 +17,26 @@ public class MusicManager {
   
     }
 
+    public boolean getMusicOn() {
+        return musicOn;   
+    }
+
     public static MusicManager getInstance(){
       return instance;
     }
 
     public void playMusic(){
+        this.musicOn = true;
         music.play();
     }
 
-
     public void pauseMusic(){
+        this.musicOn = false;
         music.pause();
+    
     }
 
     
-    public Boolean musicOn(){
-        if(music.isPlaying() == true){
-          return true;
-        }
-        return false;
-    }
-      
 
 
 

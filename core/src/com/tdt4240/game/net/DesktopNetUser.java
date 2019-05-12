@@ -1,4 +1,4 @@
-package com.tdt4240.game.desktop.net;
+package com.tdt4240.game.net;
 
 import java.util.UUID;
 

@@ -1,10 +1,8 @@
-package com.tdt4240.game.desktop.net;
+package com.tdt4240.game.net;
 
-import java.util.Random;
 import java.util.UUID;
 import java.nio.ByteBuffer;
-import com.tdt4240.game.net.INetSocket;
-import com.tdt4240.game.net.NetSocket;
+
 import com.tdt4240.game.net.message.INetData;
 import com.tdt4240.game.net.message.MessageSocket;
 import com.tdt4240.game.net.message.NetMessage;

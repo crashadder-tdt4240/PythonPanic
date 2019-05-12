@@ -18,6 +18,7 @@ public class MainMenuModel extends GdxStageModel{
   private TextButton.TextButtonStyle style;
   private Table table;
   private Skin skin;
+  private MusicManager musicern = new MusicManager();
 
 
   public MainMenuModel(){
@@ -26,10 +27,13 @@ public class MainMenuModel extends GdxStageModel{
     Drawable splash = new TextureRegionDrawable(new TextureRegion(splashTexture));
     MusicManager music = MusicManager.getInstance();
         
+    
+    
     skin = assets.getAsset("skin.uiskin.json");
-    music.playMusic();
-
-
+    
+    if(music.getMusicOn()){
+      music.playMusic();
+    }
     table = new Table();
     table.setBackground(splash);
     

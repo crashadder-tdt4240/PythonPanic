@@ -57,8 +57,6 @@ public class MainMenuModel extends GdxStageModel{
     table.row();
     table.add(findButton);
     table.row();
-    table.add(startButton);
-    table.row();
     table.add(exitButton);
     table.row();
     table.add(settingsButton);

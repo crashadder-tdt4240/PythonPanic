@@ -42,7 +42,7 @@ public class Box2DUtils{
 
   public static final FixtureDef PLAYER_FIXTURE_DEF = new FixtureDef(){{
     shape = new CircleShape();
-    shape.setRadius(7);
+    shape.setRadius(4);
     density = 1;
     filter.categoryBits = Category.PLAYER;
     filter.maskBits = 0b110;

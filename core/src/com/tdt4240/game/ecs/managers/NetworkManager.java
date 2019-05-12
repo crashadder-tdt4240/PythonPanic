@@ -7,16 +7,19 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.tdt4240.game.ecs.MpTestMap;
 import com.tdt4240.game.ecs.components.Box2dComponent;
 import com.tdt4240.game.ecs.components.NetworkComponent;
+import com.tdt4240.game.ecs.components.SnakeComponent;
 import com.tdt4240.game.ecs.components.TransformComponent;
 import com.tdt4240.game.ecs.net.NetHelper;
 import com.tdt4240.game.net.message.IMessageSocket;
 import com.tdt4240.game.net.message.INetData;
 import com.tdt4240.game.net.message.NetMessage;
+import com.tdt4240.game.net.session.NetUser;
 
 public class NetworkManager extends IteratingSystem{
   
@@ -26,13 +29,19 @@ public class NetworkManager extends IteratingSystem{
 
   private ComponentMapper<Box2dComponent> box2ComponentMapper;
   private ComponentMapper<TransformComponent> tComponentMapper;
+  private ComponentMapper<SnakeComponent> snakeMapper;
 
 
   private IMessageSocket socket;
   private MpTestMap testMap;
+  private NetUser localUser;
   private int currentTick = 0;
   public NetworkManager(){
     super(Aspect.one(NetworkComponent.class));
+  }
+
+  public void setLocalPlayer(NetUser user){
+    localUser = user;
   }
 
   public void setSocket(IMessageSocket socket, MpTestMap testMap){
@@ -47,6 +56,10 @@ public class NetworkManager extends IteratingSystem{
       recieveUpdateMessage((NetMessage)data);
     
     });
+    
+    socket.getMessages(1005).subscribe((INetData data) -> {
+      recieveDeleteMessage((NetMessage) data);
+    });
 
 
   }
@@ -60,7 +73,8 @@ public class NetworkManager extends IteratingSystem{
     ByteBuffer buffer = message.getBuffer();
     int remoteId = buffer.getInt();
     Vector3 pos = NetHelper.readVector3(buffer, new Vector3(0, 0, 0));
-    testMap.createSnake(remoteId, pos);
+    float angle = buffer.getFloat();
+    testMap.createSnake(remoteId, pos, angle);
   }
   
   private void recieveUpdateMessage(NetMessage message){
@@ -71,13 +85,24 @@ public class NetworkManager extends IteratingSystem{
     NetHelper.readBox2dComponent(buffer, box2dComponent);
   }
 
+  private void recieveDeleteMessage(NetMessage message){
+    int remoteId = message.getBuffer().getInt();
+    int entity = entityMap.get(remoteId);
+    System.out.println("Delete message recieve");
+    System.out.println(remoteId);
+    System.out.println(entity);
+    
+    getWorld().delete(entity);
+  }
+
   private void sendCreateMessage(int entityId){
 
     NetMessage message = new NetMessage(1000);
     ByteBuffer buffer = message.getBuffer();
     buffer.putInt(entityId);
     NetHelper.writeVector3(buffer, tComponentMapper.get(entityId).transform.getTranslation(new Vector3(0, 0,0 )));
-
+    buffer.putFloat(MathUtils.radiansToDegrees * box2ComponentMapper.get(entityId).body.getAngle());
+    
     socket.sendMessage(message);
   }
 
@@ -121,6 +146,19 @@ public class NetworkManager extends IteratingSystem{
     NetworkComponent component = componentMapper.get(entity);
     if(component.remote){
       entityMap.remove(component.remoteId);
+    } else {
+      System.out.println("Delete message");
+      NetMessage deleteMessage = new NetMessage(1005);
+      deleteMessage.getBuffer().putInt(entity);
+      if(snakeMapper.has(entity)){
+        //NetMessage playerDiedMessage = new NetMessage(100);
+        //long least = localUser.getUserId().getLeastSignificantBits();
+        //long most = localUser.getUserId().getMostSignificantBits();
+        //playerDiedMessage.getBuffer().putLong(least);
+        //playerDiedMessage.getBuffer().putLong(most);
+        // send message
+      }
+      socket.sendMessage(deleteMessage);
     }
     
   }

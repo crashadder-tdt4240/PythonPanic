@@ -102,13 +102,14 @@ public class PowerupFactory extends EntityFactory{
     transformComponent.transform.setTranslation(vec);
 
     Box2dComponent box2d = box2dMapper.get(entity);
-    box2d.body.setTransform(position, 90);
+    box2d.body.setTransform(position.cpy().scl(0.25f), 90);
 
     Decal sprite = Decal.newDecal(64,64,texture, true);
 
 
     SpriteComponent spriteComponent = spriteMapper.get(entity);
     spriteComponent.sprite = sprite;
+    spriteComponent.sprite.setPosition(position.x, position.y, -80);
 
     return entity;
   }

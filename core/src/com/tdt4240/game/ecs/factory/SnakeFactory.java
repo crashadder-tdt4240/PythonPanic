@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -53,7 +54,7 @@ public class SnakeFactory extends EntityFactory{
   }
 
 
-  public int createEntity(com.badlogic.gdx.physics.box2d.World bWorld, Vector3 pos, TextureRegion texture, Color color){
+  public int createEntity(com.badlogic.gdx.physics.box2d.World bWorld, Vector3 pos, float angle, TextureRegion texture, Color color){
     int entity = createEntity();
     
     Body body = Box2DUtils.createBody(bWorld, Box2DUtils.DYNAMIC_BODY_DEF, Box2DUtils.PLAYER_FIXTURE_DEF);
@@ -61,7 +62,7 @@ public class SnakeFactory extends EntityFactory{
     sComponentMapper.get(entity).sprite = Decal.newDecal(32,32, texture, true);
     dComponentMapper.get(entity).color = color;
     bComponentMapper.get(entity).body = body;
-    body.setTransform(new Vector2(pos.x, pos.y), 0);
+    body.setTransform(new Vector2(pos.x/4, pos.y/4), MathUtils.degreesToRadians*angle);
 
     return entity;
   }

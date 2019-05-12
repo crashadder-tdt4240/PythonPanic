@@ -8,4 +8,5 @@ import com.tdt4240.game.net.session.NetSession;
 public class GameMVCParams extends MVCParams<GameModel, GameView, GameController>{
   public boolean isMultiplayer = false;
   public NetSession session;
+  public int playerIndex = 0;
 }

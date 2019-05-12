@@ -59,8 +59,8 @@ public class TestMap extends GameLevel{
     TextureRegion snakeRegion = new TextureRegion(testTexture);
     
 
-    int snake1 = snakeFactory.createEntity(physicsWorld, Vector3.Zero.cpy(), snakeRegion, Color.GREEN);
-    int snake2 = snakeFactory.createEntity(physicsWorld, Vector3.Zero.cpy(), snakeRegion, Color.YELLOW);
+    int snake1 = snakeFactory.createEntity(physicsWorld, Vector3.Zero.cpy(), 0, snakeRegion, Color.GREEN);
+    int snake2 = snakeFactory.createEntity(physicsWorld, Vector3.Zero.cpy(), 0, snakeRegion, Color.YELLOW);
 
     Body body3 = Box2DUtils.createBody(physicsWorld, Box2DUtils.STATIC_BODY_DEF, Box2DUtils.WALL_FIXTURE_DEF);
     int surfaceEntity = world.create();

@@ -1,7 +1,7 @@
 package com.tdt4240.game.ecs.powerups;
 
 public class SizePowerup extends Powerup{
-  public float modifier = 1.5f;
+  public float modifier = 3f;
   public SizePowerup(){
     this(false);
   }
